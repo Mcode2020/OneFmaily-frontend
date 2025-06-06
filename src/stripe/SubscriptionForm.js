@@ -5,10 +5,17 @@ import "./SubscriptionForm.css";
 const CARD_ELEMENT_OPTIONS = {
   style: {
     base: {
-      fontSize: '16px',
-      color: '#424770',
+      fontSize: '14px',              // changed from 16px to 14px as per your request
+      color: '#000',                 // text color
+      backgroundColor: '#f2f4f7',   // background color of input
+      border: '1px solid #f2f4f7',  // border styling
+      borderRadius: '8px',           // rounded corners
+      padding: '8px 12px',           // padding inside the input
+      height: '30px',                // height of the input
+      transition: 'all 0.2s ease',  // smooth transition on focus, hover, etc.
+
       '::placeholder': {
-        color: '#aab7c4',
+        color: '#aab7c4',            // placeholder text color
       },
     },
     invalid: {
@@ -16,6 +23,7 @@ const CARD_ELEMENT_OPTIONS = {
     },
   },
 };
+
 
 const SubscriptionForm = () => {
   const stripe = useStripe();
@@ -166,92 +174,73 @@ const SubscriptionForm = () => {
   }
 
   return (
+ 
     <div className="subscription-form-container">
+        <div className="total-price-badge">
+          <h3>Total Price:</h3>
+          <span>$1500</span>
+      </div>
       <form className="subscription-form" onSubmit={handleSubmit}>
-        <h2 className="form-title">Subscribe to Premium</h2>
-        
-        <div className="form-group">
-          <label className="form-label" htmlFor="campaignName">
-            Campaign Name
-          </label>
-          <input
-            id="campaignName"
-            name="campaignName"
-            type="text"
-            className="form-input"
-            placeholder="Enter campaign name"
-            required
-            value={formData.campaignName}
-            onChange={handleInputChange}
-          />
-        </div>
+        <div className="payment-fields">
+          <h3 className="section-title">Card Details</h3>
 
-        <div className="form-row">
           <div className="form-group">
-            <label className="form-label" htmlFor="firstName">
-              First Name
-            </label>
+            <label className="form-label" htmlFor="cardNumber">Card Number</label>
             <input
-              id="firstName"
-              name="firstName"
+              id="cardNumber"
               type="text"
+              name="cardNumber" 
               className="form-input"
-              placeholder="John"
+              placeholder="1234 5678 9012 3456"
               required
-              value={formData.firstName}
-              onChange={handleInputChange}
+              value=""
+              // onChange={handleInputChange}
             />
           </div>
 
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label" htmlFor="expiryMonth">Expiry Month</label>
+              <input
+                id="expiryMonth"
+                type="text"
+                name="expiryMonth"
+                className="form-input"
+                placeholder="MM"
+                required
+                value= ""
+                // onChange={handleInputChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="expiryYear">Expiry Year</label>
+              <input
+                id="expiryYear"
+                type="text"
+                name="expiryYear"
+                className="form-input"
+                placeholder="YYYY"
+                required
+                value=""
+                // onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
           <div className="form-group">
-            <label className="form-label" htmlFor="lastName">
-              Last Name
-            </label>
+            <label className="form-label" htmlFor="cvv">CVV</label>
             <input
-              id="lastName"
-              name="lastName"
+              id="cvv"
               type="text"
+              name="cvv"
               className="form-input"
-              placeholder="Doe"
+              placeholder="123"
               required
-              value={formData.lastName}
+              value={formData.cvv}
               onChange={handleInputChange}
             />
           </div>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label" htmlFor="email">
-            Email Address
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            className="form-input"
-            placeholder="your@email.com"
-            required
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label" htmlFor="amount">
-            Amount ($)
-          </label>
-          <input
-            id="amount"
-            name="amount"
-            type="number"
-            min="0"
-            step="0.01"
-            className="form-input"
-            placeholder="Enter amount"
-            required
-            value={formData.amount}
-            onChange={handleInputChange}
-          />
         </div>
 
         <div className="address-section">
@@ -323,7 +312,7 @@ const SubscriptionForm = () => {
           </div>
 
           <div className="form-row">
-            <div className="form-group">
+            <div className="form-group mb-0">
               <label className="form-label" htmlFor="address.postalCode">
                 Postal Code
               </label>
@@ -339,7 +328,7 @@ const SubscriptionForm = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group mb-0">
               <label className="form-label" htmlFor="address.country">
                 Country
               </label>
@@ -354,15 +343,6 @@ const SubscriptionForm = () => {
                 onChange={handleInputChange}
               />
             </div>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">
-            Card Details
-          </label>
-          <div className="card-element-container">
-            <CardElement options={CARD_ELEMENT_OPTIONS} />
           </div>
         </div>
 
