@@ -1,31 +1,210 @@
-.subscription-form-container {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: white;
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+body {
+  font-family: "Manrope", sans-serif;
+  background-color: #fff;
+}
+
+/*####################################### MAIN-WRAPPER-CSS-START #######################################*/
+.header-logo {
+  padding: 60px 0px;
+  text-align: center;
+}
+.header-logo img {
+  width: 100%;
+  max-width: 200px;
+}
+.main-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  margin-bottom: 60px;
+}
+.main-wrapper .campaign-info {
+  width: 50%;
+  position: sticky;
+  top: 40px;
+  z-index: 9;
+  align-self: flex-start;
+  margin-top: 20px;
+}
+.main-wrapper .campaign-info h2 {
+  color: #000;
+  margin-top: 0;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 45px;
+  margin-bottom: 12px;
+}
+.main-wrapper .campaign-info p {
+  font-size: 16px;
+  margin-top: 0;
+  line-height: 27px;
+  margin-bottom: 28px;
+}
+.main-wrapper .campaign-info .supportersstatusbox {
+  background-color: #f9f8fb;
+  border: 1px solid #e6e3e9;
+  border-radius: 20px;
+  margin-top: 30px;
+  padding: 25px;
+}
+.main-wrapper .campaign-info .supportersbox {
+  align-items: center;
+  margin-top: -6px;
+  display: flex;
+}
+.main-wrapper .campaign-info .heading-2 {
+  color: #351c42;
+  margin-left: 5px;
+  font-weight: 500;
+}
+.main-wrapper .campaign-info .skill {
+  margin-bottom: 24px;
+}
+.main-wrapper .campaign-info .progres-bar-2 {
+  background-color: #161616;
+  border-radius: 90px;
+  flex: 0 auto;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100px;
+  height: 14px;
+  margin-right: 8px;
+  padding: 4px;
+  display: flex;
+  position: relative;
+}
+.main-wrapper .campaign-info .progres-bar-2.card-bar {
+  opacity: 1;
+  color: #774d8c;
+  background-color: #d2ccd6;
+  border-radius: 90px;
+  width: 100%;
+  height: 5px;
+  padding: 0;
+}
+.main-wrapper .campaign-info progress {
+  appearance: none;
+  border-radius: 8px;
+  background-color: #ddd;
+  width: 100%;
+  height: 4px;
+}
+/* Customize the filled portion (value) of the progress bar */
+.main-wrapper .campaign-info progress::-webkit-progress-value {
+  background-color: #351C42;
+  border-radius: 8px;
+}
+
+.main-wrapper .campaign-info progress::-webkit-progress-bar {
+  background-color: #d2ccd6;
+  border-radius: 8px;
+}
+
+/* Firefox-specific customization */
+.main-wrapper progress::-moz-progress-bar {
+  background-color: #351C42;
+  border-radius: 8px;
+}
+
+/* Internet Explorer/Edge customization */
+.main-wrapper .campaign-info progress[value]::-ms-fill {
+  background-color: #351C42;
+  border-radius: 8px;
+}
+.main-wrapper .campaign-info .goalsraisedmoney {
+  margin-top: -18px;
+  display: block;
+}
+.main-wrapper .campaign-info .w-row {
+  display: flex;
+  justify-content: space-between;
+}
+.main-wrapper .campaign-info .w-col-6 {
+  width: 50%;
+  float: left;
+  min-height: 1px;
+  position: relative;
+}
+.main-wrapper .campaign-info .heading-11.goalsraisedmoneytitle {
+  color: #000;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.main-wrapper .campaign-info .campaign-goal-flex {
+  align-items: center;
+  display: flex;
+}
+.main-wrapper .campaign-info .heading-9 {
+  color: #000;
+  text-align: left;
+  margin-top: -8px;
+  font-size: 17px;
+}
+.main-wrapper .campaign-info .heading-9 {
+  color: #000;
+  text-align: left;
+  margin-top: -8px;
+  font-size: 17px;
+}
+.main-wrapper .campaign-info .heading-11.goalsraisedmoneytitle.righttext {
+  text-align: right;
+}
+.main-wrapper .campaign-info .campaign-goal-flex.raised-flex-campaign {
+  justify-content: flex-end;
+}
+.main-wrapper .campaign-info .heading-9.righttext {
+  text-align: right;
+}
+.main-wrapper .campaign-info .back-btn {
+  text-align: center;
+  margin-top: 80px;
+}
+.main-wrapper .campaign-info .back-btn a {
+  color: #351c42;
+  background-color: #ffc300;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 12px 42px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+}
+/*####################################### MAIN-WRAPPER-CSS-END #######################################*/
+
+
+/*####################################### FORM-CSS-START #######################################*/
+.subscription-form-container {
+  width: 50%;
+  background-color: #fafafa;
+  border-radius: 10px;
+  box-shadow: 0 0px 10px 5px #351c4217;
 }
 
 .subscription-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding: 2rem;
 }
 
 .form-title {
-  color: #2d3748;
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #101828;
+  font-size: 1.5rem;
+  margin: 0 0 20px 0;
   text-align: center;
 }
 
 .section-title {
-  color: #2d3748;
-  font-size: 1.2rem;
-  margin: 1rem 0;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e2e8f0;
+  color: #351c42;
+  font-weight: 600;
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 .form-row {
@@ -34,47 +213,63 @@
   gap: 1rem;
 }
 
-@media (max-width: 640px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
+.total-price-badge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px;
+  background-color: #351c42;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
-
+.total-price-badge h3 {
+  font-size: 20px;
+  color: #fff;
+  font-weight: 500;
+  margin: 0;
+}
+.total-price-badge span {
+  font-size: 32px;
+  color: #fff;
+  font-weight: 700;
+}
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .form-label {
-  font-size: 0.9rem;
-  color: #4a5568;
-  font-weight: 500;
+  font-size: 14px;
+  color: #101828;
+  font-weight: 400;
 }
 
 .form-input {
-  padding: 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 1rem;
+  font-size: 14px;  
+  color: #000;
+  background-color: #f2f4f7;
+  border: 1px solid #f2f4f7;
+  border-radius: 8px;
+  padding: 8px 12px;
+  height: 30px;
   transition: all 0.2s ease;
+}
+
+::placeholder {
+  font-family: "Manrope", sans-serif;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #4299e1;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+  border-color: #351c42;
+  box-shadow: none;
 }
 
 .form-input::placeholder {
-  color: #a0aec0;
-}
-
-.address-section {
-  background-color: #f7fafc;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  color: #292d3281;
+  font-weight: 400;
 }
 
 .card-element-container {
@@ -85,26 +280,26 @@
 }
 
 .submit-button {
-  background-color: #4299e1;
-  color: white;
-  padding: 0.75rem;
+  font-size: 16px;
+  color: #fff;
+  background-color: #351c42;
+  border-radius: 10px;
+  padding-top: 15px; 
+  padding-bottom: 15px;
+  font-weight: 600;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 1rem;
+  font-family: "Manrope", sans-serif;
 }
 
 .submit-button:hover:not(:disabled) {
-  background-color: #3182ce;
   transform: translateY(-1px);
   box-shadow: 0 4px 6px rgba(66, 153, 225, 0.1);
 }
 
 .submit-button:disabled {
-  background-color: #a0aec0;
+  opacity: 50%;
   cursor: not-allowed;
 }
 
@@ -117,8 +312,9 @@
   border: 1px solid #feb2b2;
   border-radius: 6px;
 }
+/*####################################### FORM-CSS-END #######################################*/
 
-/* Custom styles for Stripe Card Element */
+/*######################### Custom styles for Stripe Card Element Start ###########################*/
 .StripeElement {
   padding: 0.75rem;
 }
@@ -132,8 +328,9 @@
 .StripeElement--invalid {
   border-color: #e53e3e;
 }
+/*######################### Custom styles for Stripe Card Element End ###########################*/
 
-/* Loading spinner */
+/*################################ Loading spinner ##################################*/
 .spinner {
   display: inline-block;
   width: 1rem;
@@ -150,3 +347,58 @@
     transform: rotate(360deg);
   }
 } 
+
+
+/*######################### MEDIA-QUERY-START ###########################*/
+@media (max-width: 767px) {
+  .header-logo {
+    padding: 40px 0px;
+  }
+  .header-logo img {
+    max-width: 160px;
+  }
+  .total-price-badge {
+    padding: 25px 20px;
+  }
+  .total-price-badge h3 {
+    font-size: 18px;
+  }
+  .total-price-badge span {
+    font-size: 24px;
+  }
+  .main-wrapper .campaign-info h2 {
+    font-size: 26px;
+    line-height: 36px;
+  }
+  .main-wrapper .campaign-info .back-btn {
+    margin-top: 40px;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0rem;
+  }
+  .subscription-form {
+    padding: 1.56rem 1.25rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .main-wrapper {
+    gap: 40px;
+    flex-direction: column-reverse;
+  }
+  .main-wrapper .campaign-info, .subscription-form-container {
+    width: 100%;
+  }
+  .main-wrapper .campaign-info {
+    position: unset;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 1399px) {
+  .container-1330 {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
