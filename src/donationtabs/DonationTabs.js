@@ -1,5 +1,6 @@
 import React from 'react';
 import './DonationTabs.css';
+import BASE_URL from '../BaseUrl';
 
 const DonationTabs = () => {
   return (
@@ -86,7 +87,7 @@ const DonationTabs = () => {
     <div class="pr-100 pr-0-mob">
         <div class="skill-header-2 tablerow2 mt-0 mb-18">
             <div class="text_imgbox">
-            <img loading="lazy" src="/images/raised.svg" class="image-8" />
+            <img loading="lazy" src={`${BASE_URL}images/raised.svg`} class="image-8" />
             <h4 class="tablerow2_text">Raised</h4>
             </div>
             <h4 class="card-text tablerow2_righttext">$120,000</h4>
@@ -96,7 +97,7 @@ const DonationTabs = () => {
         </div>
         <div class="skill-header-2 tablerow2 my-18">
             <div class="text_imgbox">
-            <img loading="lazy" src="/images/goal.svg" class="image-8" />
+            <img loading="lazy" src={`${BASE_URL}images/goal.svg`} class="image-8" />
             <h4 class="tablerow2_text">Goal</h4>
             </div>
             <h4 class="card-text tablerow2_righttext">$200,000</h4>
@@ -106,7 +107,7 @@ const DonationTabs = () => {
         </div>
         <div class="skill-header-2 tablerow2 mt-18 mb-0">
             <div class="text_imgbox">
-            <img loading="lazy" src="/images/donation.svg" class="image-8" />
+            <img loading="lazy" src={`${BASE_URL}images/donation.svg`} class="image-8" />
             <h4 class="tablerow2_text">Donations</h4>
             </div>
             <h4 class="card-text tablerow2_righttext">70%</h4>
@@ -116,7 +117,11 @@ const DonationTabs = () => {
     <div className="donation-receive-list">
         <div class="skill-header-2 tablerow2">
             <div class="text_imgbox">
-                <img loading="lazy" src="/images/tick.svg" class="image-8" />
+            <img
+  loading="lazy"
+  src={`${BASE_URL}images/tick.svg`}
+  className="image-8"
+/>
                 <h4 class="tablerow2_text">John Doe Lorem</h4>
             </div>
             <h4 class="card-text tablerow2_righttext">$15000</h4>
@@ -126,7 +131,11 @@ const DonationTabs = () => {
         </div>
         <div class="skill-header-2 tablerow2">
             <div class="text_imgbox">
-                <img loading="lazy" src="/images/tick.svg" class="image-8" />
+            <img
+  loading="lazy"
+  src={`${BASE_URL}images/tick.svg`}
+  className="image-8"
+/>
                 <h4 class="tablerow2_text">John Doe Lorem</h4>
             </div>
             <h4 class="card-text tablerow2_righttext">$15000</h4>
@@ -136,7 +145,11 @@ const DonationTabs = () => {
         </div>
         <div class="skill-header-2 tablerow2">
             <div class="text_imgbox">
-                <img loading="lazy" src="/images/tick.svg" class="image-8" alt="Tick Icon" />
+            <img
+  loading="lazy"
+  src={`${BASE_URL}images/tick.svg`}
+  className="image-8"
+/>
                 <h4 class="tablerow2_text">John Doe Lorem</h4>
             </div>
             <h4 class="card-text tablerow2_righttext">$15000</h4>
@@ -146,7 +159,11 @@ const DonationTabs = () => {
         </div>
         <div class="skill-header-2 tablerow2">
             <div class="text_imgbox">
-                <img loading="lazy" src="/images/tick.svg" class="image-8" alt="Tick Icon" />
+            <img
+  loading="lazy"
+  src={`${BASE_URL}images/tick.svg`}
+  className="image-8"
+/>
                 <h4 class="tablerow2_text">John Doe Lorem</h4>
             </div>
             <h4 class="card-text tablerow2_righttext">$15000</h4>
@@ -156,7 +173,10 @@ const DonationTabs = () => {
         </div>
         <div class="skill-header-2 tablerow2">
             <div class="text_imgbox">
-                <img loading="lazy" src="/images/tick.svg" class="image-8" alt="Tick Icon" />
+                <img loading="lazy"
+  src={`${BASE_URL}images/tick.svg`}
+  className="image-8"
+/>
                 <h4 class="tablerow2_text">John Doe Lorem</h4>
             </div>
             <h4 class="card-text tablerow2_righttext">$15000</h4>

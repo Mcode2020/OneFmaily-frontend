@@ -4,6 +4,8 @@ import PaymentPage from "./pages/PaymentPage";
 import "./App.css";
 import CampaignDonation from "./campaigndonationbox/CampaignDonation";
 import DonationTabs from "./donationtabs/DonationTabs";
+import "./donationtabs/DonationTabs.css";
+import StripeContainer from "./stripe/StripeContainer";
 
 function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -22,15 +24,15 @@ function App() {
     setCurrentPath(path);
   };
 
-  const renderPage = () => {
-    if (currentPath === '/' || currentPath === '/donate') {
-      return <DonationPage onNavigate={navigate} />;
-    }
-    if (currentPath.startsWith('/payment/')) {
-      return <PaymentPage />;
-    }
-    return <DonationPage onNavigate={navigate} />;
-  };
+  // const renderPage = () => {
+  //   if (currentPath === '/' || currentPath === '/donate') {
+  //     return <DonationPage onNavigate={navigate} />;
+  //   }
+  //   if (currentPath.startsWith('/payment/')) {
+  //     return <PaymentPage />;
+  //   }
+  //   return <DonationPage onNavigate={navigate} />;
+  // };
 
   return (
     <div className="App">
