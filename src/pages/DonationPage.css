@@ -1,0 +1,56 @@
+.donation-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 40px 20px;
+}
+
+.donation-page-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.donation-page h1 {
+  font-size: 36px;
+  color: #2d3748;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #4a5568;
+  margin-bottom: 40px;
+}
+
+.donate-button {
+  background-color: #6B46C1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 32px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.donate-button:hover {
+  background-color: #553C9A;
+}
+
+@media (max-width: 480px) {
+  .donation-page {
+    padding: 20px 16px;
+  }
+
+  .donation-page h1 {
+    font-size: 28px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+} 

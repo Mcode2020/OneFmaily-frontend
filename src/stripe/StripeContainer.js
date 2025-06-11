@@ -1,15 +1,9 @@
 import React from "react";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 import SubscriptionForm from "./SubscriptionForm";
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
-
-const StripeContainer = () => {
+const StripeContainer = ({ onPaymentSuccess }) => {
   return (
-    <Elements stripe={stripePromise}>
-      <SubscriptionForm />
-    </Elements>
+    <SubscriptionForm onPaymentSuccess={onPaymentSuccess} />
   );
 };
 

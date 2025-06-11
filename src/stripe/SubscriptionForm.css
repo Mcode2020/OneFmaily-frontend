@@ -312,6 +312,36 @@ body {
   border: 1px solid #feb2b2;
   border-radius: 6px;
 }
+
+.success-msg-container {
+  text-align: center;
+  padding: 40px;
+  min-height: 430px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.success-msg-container h3 {
+  font-size: 28px;
+  margin: 0 0 12px 0;
+}
+.success-msg-container p {
+  font-size: 16px;
+  line-height: 26px;
+  margin: 0 0 25px 0;
+}
+.success-msg-container button {
+  font-size: 16px;
+  color: #fff;
+  background-color: #351c42;
+  border-radius: 10px;
+  padding: 12px 25px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "Manrope", sans-serif;
+}
 /*####################################### FORM-CSS-END #######################################*/
 
 /*######################### Custom styles for Stripe Card Element Start ###########################*/
@@ -327,6 +357,22 @@ body {
 
 .StripeElement--invalid {
   border-color: #e53e3e;
+}
+
+.stripe-card-element {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  background-color: white;
+}
+
+.stripe-card-element.StripeElement--focus {
+  border-color: #4299e1;
+  box-shadow: 0 0 0 1px #4299e1;
+}
+
+.stripe-card-element.StripeElement--invalid {
+  border-color: #f56565;
 }
 /*######################### Custom styles for Stripe Card Element End ###########################*/
 
@@ -380,6 +426,9 @@ body {
   .subscription-form {
     padding: 1.56rem 1.25rem;
   }
+  .success-msg-container {
+    padding: 25px;
+  }
 }
 
 @media (max-width: 991px) {
@@ -393,6 +442,9 @@ body {
   .main-wrapper .campaign-info {
     position: unset;
     margin-top: 0;
+  }
+  .success-msg-container {
+    min-height: 200px;
   }
 }
 

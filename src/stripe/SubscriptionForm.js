@@ -1,206 +1,282 @@
-import React, { useState } from "react";
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import React, { useState, useEffect } from "react";
 import "./SubscriptionForm.css";
 
-const CARD_ELEMENT_OPTIONS = {
-  style: {
-    base: {
-      fontSize: '14px',              // changed from 16px to 14px as per your request
-      color: '#000',                 // text color
-      backgroundColor: '#f2f4f7',   // background color of input
-      border: '1px solid #f2f4f7',  // border styling
-      borderRadius: '8px',           // rounded corners
-      padding: '8px 12px',           // padding inside the input
-      height: '30px',                // height of the input
-      transition: 'all 0.2s ease',  // smooth transition on focus, hover, etc.
+const SubscriptionForm = ({ onPaymentSuccess }) => {
+  // Initial form state with empty address fields
+  const initialAddressFields = {
+    line1: "",
+    line2: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    country: "",
+  };
 
-      '::placeholder': {
-        color: '#aab7c4',            // placeholder text color
-      },
-    },
-    invalid: {
-      color: '#9e2146',
-    },
-  },
-};
-
-
-const SubscriptionForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
   const [formData, setFormData] = useState({
+    // Fields that can be pre-filled from URL
     campaignName: "",
     firstName: "",
     lastName: "",
     email: "",
     amount: "",
-    address: {
-      line1: "",
-      line2: "",
-      city: "",
-      state: "",
-      postalCode: "",
-      country: "",
-    }
+    type: "recurring", // Add type to state
+    user_id: "", // Add user_id to state
+    redirectUrl: "", // Add redirectUrl to state
+    // Address fields - always empty initially for manual entry
+    address: initialAddressFields,
+    cvv: "",
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
+  useEffect(() => {
+    // Initialize Stripe
+    if (window.Stripe && process.env.REACT_APP_STRIPE_PUBLIC_KEY) {
+      window.Stripe.setPublishableKey(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+    }
+
+    try {
+      // Get encoded data from URL path
+      const pathSegments = window.location.pathname.split('/');
+      const encodedData = pathSegments[pathSegments.length - 1];
+      
+      if (encodedData && encodedData !== '') {
+        // Simple base64 decode
+        const decodedString = atob(encodedData);
+        console.log('Decoded string:', decodedString);
+        const decodedData = JSON.parse(decodedString);
+        console.log('Parsed data:', decodedData);
+        
+        setFormData(prevData => ({
+          ...prevData,
+          campaignName: decodedData.campaign || "",
+          amount: decodedData.amount || "",
+          type: decodedData.type || "recurring",
+          firstName: decodedData.customerName?.split(' ')[0] || "", // Get first name from full name
+          lastName: decodedData.customerName?.split(' ')[1] || "", // Get last name from full name
+          email: decodedData.customerEmail || "",
+          user_id: decodedData.user_id || "", // Get user_id from URL
+          redirectUrl: decodedData.redirectUrl || "", // Store redirectUrl
+          address: initialAddressFields
+        }));
+      }
+    } catch (error) {
+      console.error("Error decoding URL parameters:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Handle redirect after successful payment
+    if (success && formData.redirectUrl) {
+      setTimeout(() => {
+        window.location.href = formData.redirectUrl;
+      }, 3000); // 3 seconds delay
+    }
+  }, [success, formData.redirectUrl]);
+
+  const handleAmountChange = (amount) => {
+    setFormData(prev => ({
+      ...prev,
+      amount: amount
+    }));
+  };
+
+  const handleTypeChange = (type) => {
+    setFormData(prev => ({
+      ...prev,
+      type: type === 'once' ? 'one-time' : 'recurring'
+    }));
+  };
+
+  // Generate encoded URL
+  const generateEncodedURL = (data) => {
+    const baseUrl = 'https://4f77-122-173-31-58.ngrok-free.app';
+    
+    const dataToEncode = {
+      campaign: data.campaignName,
+      amount: data.amount,
+      type: data.type,
+      customerName: `${data.firstName} ${data.lastName}`.trim(),
+      customerEmail: data.email
+    };
+
+    // Simple base64 encode
+    const jsonString = JSON.stringify(dataToEncode);
+    const encodedData = btoa(jsonString);
+    
+    return `${baseUrl}/${encodedData}`;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name.includes('.')) {
-      const [parent, child] = name.split('.');
-      setFormData(prev => ({
+    if (name.includes(".")) {
+      const [parent, child] = name.split(".");
+      setFormData((prev) => ({
         ...prev,
         [parent]: {
           ...prev[parent],
-          [child]: value
-        }
+          [child]: value,
+        },
       }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     }
   };
 
-  const handleSubmit = async (e) => {
+  // Add utility functions for encoding/decoding
+  const encodeFormData = (data) => {
+    const encoded = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (typeof value === 'object') {
+        encoded[key] = encodeFormData(value);
+      } else {
+        encoded[key] = encodeURIComponent(value);
+      }
+    }
+    return encoded;
+  };
+
+  const decodeFormData = (data) => {
+    const decoded = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (typeof value === 'object') {
+        decoded[key] = decodeFormData(value);
+      } else {
+        decoded[key] = decodeURIComponent(value);
+      }
+    }
+    return decoded;
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    if (!stripe || !elements) {
-      setError("Stripe.js hasn't loaded yet. Please try again later.");
+    if (!window.Stripe) {
+      setError("Stripe.js failed to load.");
       setLoading(false);
       return;
     }
 
-    const cardElement = elements.getElement(CardElement);
+    const cardData = {
+      number: document.getElementById("cardNumber").value,
+      exp_month: document.getElementById("expiryMonth").value,
+      exp_year: document.getElementById("expiryYear").value,
+      cvc: document.getElementById("cvv").value,
+      name: `${formData.firstName} ${formData.lastName}`,
+      address_line1: formData.address.line1,
+      address_line2: formData.address.line2,
+      address_city: formData.address.city,
+      address_state: formData.address.state,
+      address_zip: formData.address.postalCode,
+      address_country: formData.address.country,
+    };
 
-    try {
-      const { error: paymentMethodError, paymentMethod } = await stripe.createPaymentMethod({
-        type: "card",
-        card: cardElement,
-        billing_details: {
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email,
-          address: {
-            line1: formData.address.line1,
-            line2: formData.address.line2,
-            city: formData.address.city,
-            state: formData.address.state,
-            postal_code: formData.address.postalCode,
-            country: formData.address.country,
-          },
-        },
-      });
-
-      if (paymentMethodError) {
-        setError(paymentMethodError.message);
+    window.Stripe.card.createToken(cardData, async (status, response) => {
+      if (response.error) {
+        setError(response.error.message);
         setLoading(false);
         return;
       }
 
-      // Call your backend to create a subscription
-      const response = await fetch("http://localhost:4242/create-subscription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          payment_method: paymentMethod.id,
-          email: formData.email,
-          amount: parseFloat(formData.amount),
-          campaign_name: formData.campaignName,
-          customer_details: {
-            name: `${formData.firstName} ${formData.lastName}`,
-            address: formData.address
-          }
-        }),
-      });
+      try {
+        const res = await fetch("http://localhost:8080/api/create-subscription", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: formData.type,
+            payment_method: "pm_card_visa",
+            customerEmail: formData.email,
+            customerName: `${formData.firstName} ${formData.lastName}`,
+            amount: formData.amount,
+            campaignName: formData.campaignName,
+            currency: "usd",
+            user_id: formData.user_id,
+            address_line1: formData.address.line1,
+            address_line2: formData.address.line2,
+            city: formData.address.city,
+            state: formData.address.state,
+            postal_code: formData.address.postalCode,
+            country: formData.address.country,
+          }),
+        });
 
-      const data = await response.json();
+        const data = await res.json();
 
-      if (!response.ok) {
-        throw new Error(data.message || "An error occurred while processing your subscription.");
-      }
-
-      const { error: confirmError } = await stripe.confirmCardPayment(data.clientSecret);
-      
-      if (confirmError) {
-        throw new Error(confirmError.message);
-      }
-
-      setSuccess(true);
-      cardElement.clear();
-      setFormData({
-        campaignName: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        amount: "",
-        address: {
-          line1: "",
-          line2: "",
-          city: "",
-          state: "",
-          postalCode: "",
-          country: "",
+        if (!res.ok) {
+          throw new Error(data.error || "Subscription failed.");
         }
-      });
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+
+        setSuccess(true);
+        onPaymentSuccess(); // Call the success callback
+
+        setFormData({
+          campaignName: "",
+          amount: "",
+          type: "recurring",
+          firstName: "",
+          lastName: "",
+          email: "",
+          user_id: "",
+          redirectUrl: "",
+          address: initialAddressFields,
+          cvv: "",
+        });
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    });
   };
 
   if (success) {
     return (
       <div className="subscription-form-container">
-        <div className="form-title">Thank you!</div>
-        <p style={{ textAlign: 'center', color: '#48bb78' }}>
-          Your subscription has been processed successfully.
-        </p>
-        <button 
-          className="submit-button"
-          onClick={() => setSuccess(false)}
-          style={{ marginTop: '1rem' }}
-        >
-          Subscribe Again
-        </button>
+        <div className="success-msg-container">
+          <h3>Thank you!</h3>
+          <p>Your subscription has been processed successfully.</p>
+        </div>
       </div>
     );
   }
 
   return (
- 
     <div className="subscription-form-container">
-        <div className="total-price-badge">
-          <h3>Total Price:</h3>
-          <span>$1500</span>
+      <div className="total-price-badge">
+        <h3>Total Price:</h3>
+        <span>${formData.amount}</span>
       </div>
+      
       <form className="subscription-form" onSubmit={handleSubmit}>
         <div className="payment-fields">
           <h3 className="section-title">Card Details</h3>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="cardNumber">Card Number</label>
+            <label className="form-label" htmlFor="cardNumber">
+              Card Number
+            </label>
             <input
               id="cardNumber"
               type="text"
-              name="cardNumber" 
+              name="cardNumber"
               className="form-input"
               placeholder="1234 5678 9012 3456"
               required
-              value=""
-              // onChange={handleInputChange}
             />
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label className="form-label" htmlFor="expiryMonth">Expiry Month</label>
+              <label className="form-label" htmlFor="expiryMonth">
+                Expiry Month
+              </label>
               <input
                 id="expiryMonth"
                 type="text"
@@ -208,13 +284,13 @@ const SubscriptionForm = () => {
                 className="form-input"
                 placeholder="MM"
                 required
-                value= ""
-                // onChange={handleInputChange}
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label" htmlFor="expiryYear">Expiry Year</label>
+              <label className="form-label" htmlFor="expiryYear">
+                Expiry Year
+              </label>
               <input
                 id="expiryYear"
                 type="text"
@@ -222,14 +298,14 @@ const SubscriptionForm = () => {
                 className="form-input"
                 placeholder="YYYY"
                 required
-                value=""
-                // onChange={handleInputChange}
               />
             </div>
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="cvv">CVV</label>
+            <label className="form-label" htmlFor="cvv">
+              CVV
+            </label>
             <input
               id="cvv"
               type="text"
@@ -245,7 +321,7 @@ const SubscriptionForm = () => {
 
         <div className="address-section">
           <h3 className="section-title">Billing Address</h3>
-          
+
           <div className="form-group">
             <label className="form-label" htmlFor="address.line1">
               Address Line 1
@@ -346,24 +422,19 @@ const SubscriptionForm = () => {
           </div>
         </div>
 
-        {error && (
-          <div className="error-message">
-            {error}
-          </div>
-        )}
+        {error && <div className="error-message">{error}</div>}
 
-        <button 
-          type="submit" 
-          className="submit-button" 
-          disabled={!stripe || loading}
+        <button
+          type="submit"
+          className="submit-button"
+          disabled={loading}
         >
           {loading ? (
             <>
-              <span className="spinner"></span>
-              Processing...
+              <span className="spinner"></span> Processing...
             </>
           ) : (
-            'Subscribe Now'
+            "Subscribe Now"
           )}
         </button>
       </form>

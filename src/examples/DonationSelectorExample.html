@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Selector Example</title>
+    <link rel="stylesheet" href="../stripe/DonationSelector.css">
+</head>
+<body>
+    <h1>Make a Difference Today</h1>
+    <p>Your donation helps provide meals to those in need</p>
+
+    <!-- Using the custom element -->
+    <donation-selector 
+        amount="1800"
+        type="once"
+    ></donation-selector>
+
+    <script type="module">
+        // Import the custom element
+        import DonationSelector from '../stripe/DonationSelector.js';
+
+        // Example of listening to events
+        const donationSelector = document.querySelector('donation-selector');
+
+        donationSelector.addEventListener('amountChange', (e) => {
+            console.log('Amount changed:', e.detail.amount);
+        });
+
+        donationSelector.addEventListener('typeChange', (e) => {
+            console.log('Type changed:', e.detail.type);
+        });
+    </script>
+</body>
+</html> 
