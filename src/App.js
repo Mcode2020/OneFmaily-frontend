@@ -1,7 +1,7 @@
 import React from "react";
 import StripeContainer from "./stripe/StripeContainer";
 import "./App.css";
-
+//chnages
 function App() {
   return (
     <div className="App">
