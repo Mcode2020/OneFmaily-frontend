@@ -2,6 +2,7 @@
 .campaign-right-sidebar-main {
   background-color: #f9f8fb;
   border-radius: 20px;
+  margin-bottom: 60px;
 }
 
 .campaign-right-sidebar-main .camapign-right-tabs-main {
@@ -84,6 +85,7 @@
 }
 
 .campaign-right-sidebar-main .campaign-right-price-btn {
+  width: 32%;
   color: #000;
   background-color: transparent;
   border: 1px solid #e3e2e4;
@@ -91,6 +93,7 @@
   padding: 15px 29px;
   font-size: 16px;
   text-decoration: none;
+  text-align: center;
   display: inline-block;
   transition: color 0.4s, background-color 0.4s;
 }
@@ -109,7 +112,7 @@
   color: #6f6f6f;
   text-align: center;
   border-radius: 10px;
-  height: 34px;
+  height: 52px;
   font-size: 15px;
   font-weight: 500;
   vertical-align: middle;
@@ -128,6 +131,7 @@
 .campaign-right-sidebar-main .checkbox-field {
   margin-bottom: 0;
   display: flex;
+  padding-left: 0;
 }
 
 .campaign-right-sidebar-main .checkbox-field input {
@@ -141,7 +145,7 @@
   color: #6f6f6f;
   font-size: 13px;
   font-weight: 500;
-  margin: 0 0 0 6px;
+  margin: -4px 0 0 10px;
   line-height: 20px;
   cursor: pointer;
 }
@@ -203,6 +207,9 @@
     border: 1px solid #e8e8e8;
 }
 
+.donation-receive-list {
+  margin-top: 60px;
+}
 .donation-receive-list .skill-header-2 {
     margin-top: 12px;
     margin-bottom: 12px;
@@ -239,8 +246,7 @@
         margin-top: 35px;
     }
     .campaign-right-sidebar-main .campaign-right-price-btn {
-        text-align: center;
-        width: 20%;
+        width: 31.8%;
         padding-left: 15px;
         padding-right: 15px;
     }

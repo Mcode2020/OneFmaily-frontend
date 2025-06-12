@@ -1,11 +1,13 @@
 import React from 'react'
 import "./CampaignDonation.css";
+import BASE_URL from '../BaseUrl';
+
 
 const campaignDonation = () => {
   return (
     <div className="supportersstatusbox desk-show">
         <div className="supportersbox">
-            <img loading="lazy" src="/images/supporters-icon.svg" alt="supporters-icon" />
+            <img loading="lazy" src={`${BASE_URL}images/supporters-icon.svg`} alt="supporters-icon" />
             <h5 className="heading-2">34,288&nbsp;supporters</h5>
         </div>
         <div className="prograssbar">
