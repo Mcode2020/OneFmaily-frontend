@@ -1,6 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./SubscriptionForm.css";
 
+// Add ErrorPopup component
+const ErrorPopup = ({ message, onClose }) => {
+  return (
+    <div className="error-popup-overlay">
+      <div className="error-popup">
+        <div className="error-popup-content">
+          <h3>Validation Error</h3>
+          <div className="error-messages">
+            {message.split('\n').map((error, index) => (
+              <p key={index} className="error-message-item">{error}</p>
+            ))}
+          </div>
+          <button onClick={onClose} className="error-popup-close">Close</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SubscriptionForm = ({ onPaymentSuccess }) => {
   // Initial form state with empty address fields
   const initialAddressFields = {
@@ -31,6 +50,17 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
+  const [totalAmount, setTotalAmount] = useState("");
+  const [decodedUrlData, setDecodedUrlData] = useState({
+    campaign: "",
+    amount: "",
+    type: "one-time",
+    firstName: "",
+    lastName: "",
+    user_id: "",
+    redirectUrl: ""
+  });
+
   useEffect(() => {
     // Initialize Stripe
     if (window.Stripe && process.env.REACT_APP_STRIPE_PUBLIC_KEY) {
@@ -38,32 +68,49 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
     }
 
     try {
-      // Get encoded data from URL path
-      const pathSegments = window.location.pathname.split('/');
-      const encodedData = pathSegments[pathSegments.length - 1];
+      // Get encoded data directly from URL (without using URLSearchParams)
+      const url = window.location.href;
+      console.log('Full URL:', url);
       
-      if (encodedData && encodedData !== '') {
-        // Simple base64 decode
+      // Extract everything after the ? character
+      const encodedData = url.split('?')[1];
+      console.log('Raw encoded data from URL:', encodedData);
+      
+      if (encodedData) {
+        // Decode and parse the URL data
         const decodedString = atob(encodedData);
-        console.log('Decoded string:', decodedString);
-        const decodedData = JSON.parse(decodedString);
-        console.log('Parsed data:', decodedData);
+        console.log('Base64 decoded string:', decodedString);
         
+        const decodedData = JSON.parse(decodedString);
+        console.log('Parsed URL data (decodedData):', decodedData);
+        console.log('Amount from URL:', decodedData.amount);
+        
+        // Store the complete decoded data
+        setDecodedUrlData(decodedData);
+        
+        // Set the amount
+        setTotalAmount(decodedData.amount);
+        
+        // Update form data with URL data
         setFormData(prevData => ({
           ...prevData,
+          type: decodedData.type || "one-time",
+          amount: decodedData.amount,
           campaignName: decodedData.campaign || "",
-          amount: decodedData.amount || "",
-          type: decodedData.type || "recurring",
-          firstName: decodedData.customerName?.split(' ')[0] || "", // Get first name from full name
-          lastName: decodedData.customerName?.split(' ')[1] || "", // Get last name from full name
-          email: decodedData.customerEmail || "",
-          user_id: decodedData.user_id || "", // Get user_id from URL
-          redirectUrl: decodedData.redirectUrl || "", // Store redirectUrl
+          firstName: decodedData.firstName || "",
+          lastName: decodedData.lastName || "",
+          email: `${decodedData.firstName}.${decodedData.lastName}@example.com`.toLowerCase(),
+          user_id: decodedData.user_id || "1",
+          redirectUrl: decodedData.redirectUrl || "",
           address: initialAddressFields
         }));
+      } else {
+        console.log('No encoded data found in URL');
       }
     } catch (error) {
       console.error("Error decoding URL parameters:", error);
+      console.error("Full error:", error.message);
+      setError("Error processing payment information. Please try again.");
     }
   }, []);
 
@@ -72,7 +119,7 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
     if (success && formData.redirectUrl) {
       setTimeout(() => {
         window.location.href = formData.redirectUrl;
-      }, 3000); // 3 seconds delay
+      }, 6000); // 6 seconds delay
     }
   }, [success, formData.redirectUrl]);
 
@@ -153,10 +200,164 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
     return decoded;
   };
 
-  const handleSubmit = (e) => {
+  // Add validation functions
+  const formatCardNumber = (value) => {
+    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    const matches = v.match(/\d{4,16}/g);
+    const match = (matches && matches[0]) || '';
+    const parts = [];
+
+    for (let i = 0, len = match.length; i < len; i += 4) {
+      parts.push(match.substring(i, i + 4));
+    }
+
+    if (parts.length) {
+      return parts.join(' ');
+    } else {
+      return value;
+    }
+  };
+
+  const validateCardNumber = (number) => {
+    // Remove spaces and non-digit characters
+    const cleanNumber = number.replace(/\s+/g, '');
+    
+    // Check if it's a valid length (13-19 digits)
+    if (cleanNumber.length < 13 || cleanNumber.length > 19) {
+      return false;
+    }
+
+    // Luhn algorithm for card validation
+    let sum = 0;
+    let isEven = false;
+    
+    // Loop through values starting from the rightmost digit
+    for (let i = cleanNumber.length - 1; i >= 0; i--) {
+      let digit = parseInt(cleanNumber.charAt(i));
+
+      if (isEven) {
+        digit *= 2;
+        if (digit > 9) {
+          digit -= 9;
+        }
+      }
+
+      sum += digit;
+      isEven = !isEven;
+    }
+
+    return (sum % 10) === 0;
+  };
+
+  const validateCVC = (cvc) => {
+    return /^\d{3,4}$/.test(cvc);
+  };
+
+  const validateExpiryDate = (month, year) => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    
+    const expMonth = parseInt(month);
+    const expYear = parseInt(year);
+    
+    if (expMonth < 1 || expMonth > 12) return false;
+    
+    if (expYear < currentYear) return false;
+    if (expYear === currentYear && expMonth < currentMonth) return false;
+    
+    return true;
+  };
+
+  const handleCardNumberChange = (e) => {
+    const formatted = formatCardNumber(e.target.value);
+    e.target.value = formatted;
+  };
+
+  const handleCVCChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '');
+    if (value.length <= 4) {
+      e.target.value = value;
+    }
+  };
+
+  const handleExpiryChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '');
+    if (e.target.id === 'expiryMonth' && value.length <= 2) {
+      e.target.value = value;
+    } else if (e.target.id === 'expiryYear' && value.length <= 4) {
+      e.target.value = value;
+    }
+  };
+
+  // Add address validation functions
+  const validateAddress = (address) => {
+    const errors = [];
+    
+    if (!address.line1 || address.line1.trim().length < 5) {
+      errors.push("Address Line 1 must be at least 5 characters long");
+    }
+    
+    if (address.line2 && address.line2.trim().length < 3) {
+      errors.push("Address Line 2 must be at least 3 characters long if provided");
+    }
+    
+    if (!address.city || address.city.trim().length < 2) {
+      errors.push("City is required and must be at least 2 characters long");
+    }
+    
+    if (!address.state || address.state.trim().length < 2) {
+      errors.push("State is required and must be at least 2 characters long");
+    }
+    
+    if (!address.postalCode || !/^\d{5}(-\d{4})?$/.test(address.postalCode)) {
+      errors.push("Postal Code must be in valid format (e.g., 12345 or 12345-6789)");
+    }
+    
+    if (!address.country || address.country.trim().length < 2) {
+      errors.push("Country is required and must be at least 2 characters long");
+    }
+    
+    return errors;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    // Validate card number
+    const cardNumber = document.getElementById("cardNumber").value.replace(/\s+/g, '');
+    if (!validateCardNumber(cardNumber)) {
+      setError("Please enter a valid card number");
+      setLoading(false);
+      return;
+    }
+
+    // Validate CVC
+    const cvc = document.getElementById("cvv").value;
+    if (!validateCVC(cvc)) {
+      setError("Please enter a valid CVC (3-4 digits)");
+      setLoading(false);
+      return;
+    }
+
+    // Validate expiry date
+    const month = document.getElementById("expiryMonth").value;
+    const year = document.getElementById("expiryYear").value;
+    if (!validateExpiryDate(month, year)) {
+      setError("Please enter a valid expiry date");
+      setLoading(false);
+      return;
+    }
+
+    // Validate address
+    const addressErrors = validateAddress(formData.address);
+    if (addressErrors.length > 0) {
+      setError(addressErrors.join("\n"));
+      setLoading(false);
+      return;
+    }
 
     if (!window.Stripe) {
       setError("Stripe.js failed to load.");
@@ -164,84 +365,125 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
       return;
     }
 
-    const cardData = {
-      number: document.getElementById("cardNumber").value,
-      exp_month: document.getElementById("expiryMonth").value,
-      exp_year: document.getElementById("expiryYear").value,
-      cvc: document.getElementById("cvv").value,
-      name: `${formData.firstName} ${formData.lastName}`,
-      address_line1: formData.address.line1,
-      address_line2: formData.address.line2,
-      address_city: formData.address.city,
-      address_state: formData.address.state,
-      address_zip: formData.address.postalCode,
-      address_country: formData.address.country,
-    };
+    try {
+      console.log('Form submission - Current form data:', formData);
+      console.log('Form submission - Current decoded URL data:', decodedUrlData);
+      console.log('Form submission - Total amount:', totalAmount);
 
-    window.Stripe.card.createToken(cardData, async (status, response) => {
-      if (response.error) {
-        setError(response.error.message);
-        setLoading(false);
-        return;
-      }
+      const cardData = {
+        number: document.getElementById("cardNumber").value,
+        exp_month: document.getElementById("expiryMonth").value,
+        exp_year: document.getElementById("expiryYear").value,
+        cvc: document.getElementById("cvv").value,
+        name: `${formData.firstName} ${formData.lastName}`,
+        address_line1: formData.address.line1,
+        address_line2: formData.address.line2,
+        address_city: formData.address.city,
+        address_state: formData.address.state,
+        address_zip: formData.address.postalCode,
+        address_country: formData.address.country,
+      };
 
-      try {
-        const res = await fetch("http://localhost:8080/api/create-subscription", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: formData.type,
-            payment_method: "pm_card_visa",
-            customerEmail: formData.email,
-            customerName: `${formData.firstName} ${formData.lastName}`,
-            amount: formData.amount,
-            campaignName: formData.campaignName,
-            currency: "usd",
-            user_id: formData.user_id,
-            address_line1: formData.address.line1,
-            address_line2: formData.address.line2,
-            city: formData.address.city,
-            state: formData.address.state,
-            postal_code: formData.address.postalCode,
-            country: formData.address.country,
-          }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || "Subscription failed.");
+      window.Stripe.card.createToken(cardData, async (status, response) => {
+        if (response.error) {
+          setError(response.error.message);
+          setLoading(false);
+          return;
         }
 
-        setSuccess(true);
-        onPaymentSuccess(); // Call the success callback
+        try {
+          // Log data before constructing payload
+          console.log('Before payload construction:');
+          console.log('- decodedUrlData:', decodedUrlData);
+          console.log('- formData:', formData);
+          console.log('- totalAmount:', totalAmount);
 
-        setFormData({
-          campaignName: "",
-          amount: "",
-          type: "recurring",
-          firstName: "",
-          lastName: "",
-          email: "",
-          user_id: "",
-          redirectUrl: "",
-          address: initialAddressFields,
-          cvv: "",
-        });
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    });
+          // Construct the payload using URL data
+          const payload = {
+            type: decodedUrlData.type || "one-time",
+            amount: parseInt(decodedUrlData.amount || formData.amount || totalAmount),
+            currency: "usd",
+            payment_method: "pm_card_visa",
+            customerEmail: formData.email,
+            customerName: `${decodedUrlData.firstName} ${decodedUrlData.lastName}`,
+            campaignName: decodedUrlData.campaign || formData.campaignName,
+            user_id: decodedUrlData.user_id || "1",
+            // Address details from form
+            address_line1: formData.address.line1 || "",
+            address_line2: formData.address.line2 || "",
+            city: formData.address.city || "",
+            state: formData.address.state || "",
+            postal_code: formData.address.postalCode || "",
+            country: formData.address.country || ""
+          };
+
+          console.log('Final payload being sent:', payload);
+
+          const res = await fetch("http://localhost:5000/api/create-subscription", {
+            method: "POST",
+            headers: { 
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
+          }
+
+          const data = await res.json();
+          console.log('Success response:', data);
+          setSuccess(true);
+          if (onPaymentSuccess) {
+            onPaymentSuccess(data);
+          }
+        } catch (error) {
+          console.error("Payment processing error:", error);
+          setError("Failed to process payment. Please try again.");
+        } finally {
+          setLoading(false);
+        }
+      });
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setError("An error occurred. Please try again.");
+      setLoading(false);
+    }
   };
 
   if (success) {
     return (
       <div className="subscription-form-container">
-        <div className="success-msg-container">
-          <h3>Thank you!</h3>
-          <p>Your subscription has been processed successfully.</p>
+        <div className="success-message-container" style={{
+          textAlign: 'center',
+          padding: '2rem',
+          maxWidth: '500px',
+          margin: '0 auto'
+        }}>
+          <div className="form-title" style={{
+            fontSize: '24px',
+            fontWeight: 'bold',
+            color: '#48bb78',
+            marginBottom: '1rem'
+          }}>
+            Thank you!
+          </div>
+          <p style={{ 
+            textAlign: 'center', 
+            color: '#2d3748',
+            fontSize: '16px',
+            marginBottom: '1rem'
+          }}>
+            Your subscription has been processed successfully.
+          </p>
+          <p style={{
+            color: '#718096',
+            fontSize: '14px'
+          }}>
+            Redirecting you in a few seconds...
+          </p>
         </div>
       </div>
     );
@@ -249,9 +491,13 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
 
   return (
     <div className="subscription-form-container">
-      <div className="total-price-badge">
-        <h3>Total Price:</h3>
-        <span>${formData.amount}</span>
+      {error && <ErrorPopup message={error} onClose={() => setError(null)} />}
+      
+      <div className="total-price-section">
+        <div className="total-price-card">
+          <h2 className="total-price-title">Total Price:</h2>
+          <span className="total-price-amount">${totalAmount}</span>
+        </div>
       </div>
       
       <form className="subscription-form" onSubmit={handleSubmit}>
@@ -268,6 +514,8 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
               name="cardNumber"
               className="form-input"
               placeholder="1234 5678 9012 3456"
+              maxLength="19"
+              onChange={handleCardNumberChange}
               required
             />
           </div>
@@ -283,6 +531,8 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
                 name="expiryMonth"
                 className="form-input"
                 placeholder="MM"
+                maxLength="2"
+                onChange={handleExpiryChange}
                 required
               />
             </div>
@@ -297,6 +547,8 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
                 name="expiryYear"
                 className="form-input"
                 placeholder="YYYY"
+                maxLength="4"
+                onChange={handleExpiryChange}
                 required
               />
             </div>
@@ -312,9 +564,9 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
               name="cvv"
               className="form-input"
               placeholder="123"
+              maxLength="4"
+              onChange={handleCVCChange}
               required
-              value={formData.cvv}
-              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -421,8 +673,6 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
             </div>
           </div>
         </div>
-
-        {error && <div className="error-message">{error}</div>}
 
         <button
           type="submit"

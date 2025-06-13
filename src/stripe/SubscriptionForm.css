@@ -336,3 +336,151 @@ body {
     padding-right: 20px;
   }
 }
+
+.total-price-section {
+  background-color: #2D1B3D;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.total-price-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-price-title {
+  color: #FFFFFF;
+  font-size: 24px;
+  margin: 0;
+}
+
+.total-price-amount {
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.error-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.error-popup {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  width: 90%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  animation: popupFadeIn 0.3s ease-out;
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-popup-content {
+  text-align: center;
+}
+
+.error-popup-content h3 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.error-popup-content p {
+  color: #4a5568;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.error-popup-close {
+  background-color: #4a5568;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.error-popup-close:hover {
+  background-color: #2d3748;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.error-popup-close:active {
+  transform: translateY(0);
+}
+
+.error-messages {
+  margin-bottom: 1.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.error-message-item {
+  color: #e53e3e;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.error-message-item:before {
+  content: "•";
+  position: absolute;
+  left: 0.5rem;
+  color: #e53e3e;
+}
+
+.error-message-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Customize scrollbar for error messages */
+.error-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.error-messages::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.error-messages::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+.error-messages::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}

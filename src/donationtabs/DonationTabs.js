@@ -1,13 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './DonationTabs.css';
-import BASE_URL from '../BaseUrl';
 
-const DonationTabs = () => {
+const DonationTabs = ({ campaignName = "campaign2023" }) => {
   const [activeTab, setActiveTab] = useState('once');
   const [selectedPrice, setSelectedPrice] = useState(1500);
   const [customAmount, setCustomAmount] = useState('');
+  const [campaignData, setCampaignData] = useState({
+    totalAmount: 0,
+    goalAmount: 0,
+    donations: []
+  });
+  const [urlGoalAmount, setUrlGoalAmount] = useState(0);
+  const [userPayments, setUserPayments] = useState([]);
+  const [currentCampaign, setCurrentCampaign] = useState(campaignName);
+
+  useEffect(() => {
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    let goalAmount = parseInt(urlParams.get('g') || '600000', 10);
+    let campaign = campaignName;
+
+    const encodedData = window.location.search.substring(1); // Get query string without '?'
+    if (encodedData && encodedData.length > 100) { // Heuristic: encoded data is usually longer
+      try {
+        const decodedData = JSON.parse(atob(encodedData));
+        if (decodedData.campaign) {
+          campaign = decodedData.campaign;
+        }
+        if (decodedData.redirectUrl) {
+          const redirectParams = new URLSearchParams(new URL(decodedData.redirectUrl).search);
+          const decodedGoal = parseInt(redirectParams.get('g'), 10);
+          if (!isNaN(decodedGoal)) {
+            goalAmount = decodedGoal;
+          }
+        }
+      } catch (error) {
+        console.error('Error decoding URL data:', error);
+      }
+    } else {
+      // Use simple URL parameters
+      const campaignFromUrl = urlParams.get('c');
+      if (campaignFromUrl) {
+        campaign = campaignFromUrl;
+      }
+    }
+
+    setCurrentCampaign(campaign);
+    setUrlGoalAmount(goalAmount);
+  }, []); // Empty dependency array since we only want to run this once on mount
+
+  // Separate useEffect for API calls
+  useEffect(() => {
+    if (!currentCampaign) return;
+
+    const fetchCampaignData = async () => {
+      try {
+        const response = await fetch(`https://donate.onefamilee.org/api/payments/${currentCampaign}/${urlGoalAmount}`);
+        const data = await response.json();
+        setCampaignData(data);
+      } catch (error) {
+        console.error('Error fetching campaign data:', error);
+      }
+    };
+
+    const fetchUserPayments = async () => {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('u') || urlParams.get('user_id') || '1';
+        const response = await fetch(`https://donate.onefamilee.org/api/user/${userId}`);
+        const data = await response.json();
+        setUserPayments(data.payments || []);
+      } catch (error) {
+        console.error('Error fetching user payments:', error);
+      }
+    };
+
+    fetchCampaignData();
+    fetchUserPayments();
+  }, [currentCampaign, urlGoalAmount]); // Only re-run when these values change
 
   const handleTabClick = (tab, e) => {
+    console.log(tab,"tab")
     e.preventDefault();
     setActiveTab(tab);
   };
@@ -15,12 +88,35 @@ const DonationTabs = () => {
   const handlePriceClick = (price, e) => {
     e.preventDefault();
     setSelectedPrice(price);
-    setCustomAmount(''); // Clear custom amount when a preset price is selected
+    setCustomAmount(price.toString());
   };
 
   const handleCustomAmountChange = (e) => {
     setCustomAmount(e.target.value);
-    setSelectedPrice(0); // Clear selected price when custom amount is being entered
+    setSelectedPrice(0);
+  };
+
+  const handleDonateSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!customAmount && !selectedPrice) {
+      alert('Please enter or select an amount');
+      return;
+    }
+
+    const data = {
+      campaign: currentCampaign,
+      amount: customAmount || selectedPrice,
+      type: 'one-time',
+      firstName: "John",
+      lastName: "Doe",
+      user_id: "1",
+      redirectUrl: window.location.href,
+      goalAmount: urlGoalAmount
+    };
+
+    const encodedData = btoa(JSON.stringify(data));
+    window.location.href = `https://8c0d-2401-4900-1f32-6fb7-691e-e9aa-3717-5b94.ngrok-free.app/?${encodedData}`;
   };
 
   const onceTabPrices = [
@@ -81,18 +177,19 @@ const DonationTabs = () => {
             ))}
           </div>
 
-          <form method="get" action="/stripe-checkout">
+          <form onSubmit={handleDonateSubmit}>
             <input
               className="campaign-right-input w-input"
               placeholder="Enter Your Amount"
               type="number"
               value={customAmount}
               onChange={handleCustomAmountChange}
-              required
             />
-           <label class="w-checkbox checkbox-field">
-                <input type="checkbox" name="checkbox" id="checkbox" data-name="Checkbox" />
-                <span class="campaign-right-checkbox-text w-form-label" for="checkbox">Yes, I want to see how I'm helping to provide food for children, families and communities in need. Send me occasional updates.</span>
+            <label className="w-checkbox checkbox-field">
+              <input type="checkbox" name="checkbox" id="checkbox" data-name="Checkbox" />
+              <span className="campaign-right-checkbox-text w-form-label">
+                Yes, I want to see how I'm helping to provide food for children, families and communities in need. Send me occasional updates.
+              </span>
             </label>
             <div className="campaign-detail-donate-btn">
               <input type="submit" className="campaign-right-donate-btn w-button" value="Donate" />
@@ -119,23 +216,22 @@ const DonationTabs = () => {
             ))}
           </div>
 
-          <form method="get" action="/stripe-checkout">
+          <form onSubmit={handleDonateSubmit}>
             <input
               className="campaign-right-input w-input"
               placeholder="Enter Your Amount"
               type="number"
               value={customAmount}
               onChange={handleCustomAmountChange}
-              required
             />
             <label className="w-checkbox checkbox-field">
-            <input type="checkbox" name="checkbox" id="checkbox" data-name="Checkbox" />
+              <input type="checkbox" name="checkbox" id="checkbox" data-name="Checkbox" />
               <span className="campaign-right-checkbox-text w-form-label">
                 Yes, I want to see how I'm helping to provide food for children, families and communities in need. Send me occasional updates.
               </span>
             </label>
             <div className="campaign-detail-donate-btn">
-              <input type="submit" className="campaign-right-donate-btn w-button" value="Submit" />
+              <input type="submit" className="campaign-right-donate-btn w-button" value="Donate" />
             </div>
           </form>
         </div>
@@ -146,105 +242,72 @@ const DonationTabs = () => {
           <div class="pr-100 pr-0-mob">
               <div class="skill-header-2 tablerow2 mt-0 mb-18">
                   <div class="text_imgbox">
-                  <img loading="lazy" src={`${BASE_URL}images/raised.svg`} class="image-8" />
+                  <img src={`https://donate.onefamilee.org/images/raised.svg`} className="image-8" />
                   <h4 class="tablerow2_text">Raised</h4>
                   </div>
-                  <h4 class="card-text tablerow2_righttext">$120,000</h4>
+                  <h4 class="card-text tablerow2_righttext">
+                    {typeof campaignData?.totalAmount === 'number' && !isNaN(campaignData.totalAmount)
+                      ? `$${campaignData.totalAmount.toLocaleString()}`
+                      : '$0'}
+                  </h4>
               </div>
               <div class="customborder customborder2 border_b_0">
                   <div class="inner_border inner_border2"></div>
               </div>
               <div class="skill-header-2 tablerow2 my-18">
                   <div class="text_imgbox">
-                  <img loading="lazy" src={`${BASE_URL}images/goal.svg`} class="image-8" />
+                  <img src={`https://donate.onefamilee.org/images/goal.svg`} class="image-8" />
                   <h4 class="tablerow2_text">Goal</h4>
                   </div>
-                  <h4 class="card-text tablerow2_righttext">$200,000</h4>
+                  <h4 class="card-text tablerow2_righttext">
+                    {typeof urlGoalAmount === 'number' && !isNaN(urlGoalAmount)
+                      ? `$${urlGoalAmount.toLocaleString()}`
+                      : '$0'}
+                  </h4>
               </div>
               <div class="customborder customborder2 border_b_0">
                   <div class="inner_border inner_border2"></div>
               </div>
               <div class="skill-header-2 tablerow2 mt-18 mb-0">
                   <div class="text_imgbox">
-                  <img loading="lazy" src={`${BASE_URL}images/donation.svg`} class="image-8" />
+                  <img src={`https://donate.onefamilee.org/images/donation.svg`} class="image-8" />
                   <h4 class="tablerow2_text">Donations</h4>
                   </div>
-                  <h4 class="card-text tablerow2_righttext">70%</h4>
+                  <h4 class="card-text tablerow2_righttext">
+                    {campaignData?.totalAmount && urlGoalAmount
+                      ? Math.round((campaignData.totalAmount / urlGoalAmount) * 100)
+                      : 0}%
+                  </h4>
               </div>
           </div>
 
           <div className="donation-receive-list">
-              <div class="skill-header-2 tablerow2">
-                  <div class="text_imgbox">
-                  <img
-        loading="lazy"
-        src={`${BASE_URL}images/tick.svg`}
-        className="image-8"
-      />
-                      <h4 class="tablerow2_text">John Doe Lorem</h4>
-                  </div>
-                  <h4 class="card-text tablerow2_righttext">$15000</h4>
-              </div>
-              <div class="customborder customborder2 border_b_0">
-                  <div class="inner_border inner_border2"></div>
-              </div>
-              <div class="skill-header-2 tablerow2">
-                  <div class="text_imgbox">
-                  <img
-        loading="lazy"
-        src={`${BASE_URL}images/tick.svg`}
-        className="image-8"
-      />
-                      <h4 class="tablerow2_text">John Doe Lorem</h4>
-                  </div>
-                  <h4 class="card-text tablerow2_righttext">$15000</h4>
-              </div>
-              <div class="customborder customborder2 border_b_0">
-                  <div class="inner_border inner_border2"></div>
-              </div>
-              <div class="skill-header-2 tablerow2">
-                  <div class="text_imgbox">
-                  <img
-        loading="lazy"
-        src={`${BASE_URL}images/tick.svg`}
-        className="image-8"
-      />
-                      <h4 class="tablerow2_text">John Doe Lorem</h4>
-                  </div>
-                  <h4 class="card-text tablerow2_righttext">$15000</h4>
-              </div>
-              <div class="customborder customborder2 border_b_0">
-                  <div class="inner_border inner_border2"></div>
-              </div>
-              <div class="skill-header-2 tablerow2">
-                  <div class="text_imgbox">
-                  <img
-        loading="lazy"
-        src={`${BASE_URL}images/tick.svg`}
-        className="image-8"
-      />
-                      <h4 class="tablerow2_text">John Doe Lorem</h4>
-                  </div>
-                  <h4 class="card-text tablerow2_righttext">$15000</h4>
-              </div>
-              <div class="customborder customborder2 border_b_0">
-                  <div class="inner_border inner_border2"></div>
-              </div>
-              <div class="skill-header-2 tablerow2">
-                  <div class="text_imgbox">
-                      <img loading="lazy"
-        src={`${BASE_URL}images/tick.svg`}
-        className="image-8"
-      />
-                      <h4 class="tablerow2_text">John Doe Lorem</h4>
-                  </div>
-                  <h4 class="card-text tablerow2_righttext">$15000</h4>
-              </div>
+              {userPayments.map((payment, index) => {
+                const amount = parseFloat(payment?.amount || '0');
+                return (
+                  <React.Fragment key={index}>
+                    <div className="skill-header-2 tablerow2">
+                      <div className="text_imgbox">
+                        <img
+                          loading="lazy"
+                          src={`https://donate.onefamilee.org/images/tick.svg`}
+                          className="image-8"
+                        />
+                        <h4 className="tablerow2_text">{payment.name}</h4>
+                      </div>
+                      <h4 className="card-text tablerow2_righttext">
+                        {`$${!isNaN(amount) ? amount.toLocaleString() : '0'}`}
+                      </h4>
+                    </div>
+                    <div className="customborder customborder2 border_b_0">
+                      <div className="inner_border inner_border2"></div>
+                    </div>
+                  </React.Fragment>
+                );
+              })}
           </div>
     </div>
     </>
-
-    
   );
 };
 
