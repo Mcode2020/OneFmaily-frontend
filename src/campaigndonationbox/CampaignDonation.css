@@ -1,24 +1,24 @@
-.main-wrapper .campaign-info .supportersstatusbox {
+.supportersstatusbox {
   background-color: #f9f8fb;
   border: 1px solid #e6e3e9;
   border-radius: 20px;
   margin-top: 30px;
   padding: 25px;
 }
-.main-wrapper .campaign-info .supportersbox {
+.supportersstatusbox .supportersbox {
   align-items: center;
   margin-top: -6px;
   display: flex;
 }
-.main-wrapper .campaign-info .heading-2 {
+.supportersstatusbox .heading-2 {
   color: #351c42;
   margin-left: 5px;
   font-weight: 500;
 }
-.main-wrapper .campaign-info .skill {
+.supportersstatusbox .skill {
   margin-bottom: 24px;
 }
-.main-wrapper .campaign-info .progres-bar-2 {
+.supportersstatusbox .progres-bar-2 {
   background-color: #161616;
   border-radius: 90px;
   flex: 0 auto;
@@ -31,7 +31,7 @@
   display: flex;
   position: relative;
 }
-.main-wrapper .campaign-info .progres-bar-2.card-bar {
+.supportersstatusbox .progres-bar-2.card-bar {
   opacity: 1;
   color: #774d8c;
   background-color: #d2ccd6;
@@ -40,7 +40,7 @@
   height: 5px;
   padding: 0;
 }
-.main-wrapper .campaign-info progress {
+.supportersstatusbox progress {
   appearance: none;
   border-radius: 8px;
   background-color: #ddd;
@@ -48,42 +48,42 @@
   height: 4px;
 }
 /* Customize the filled portion (value) of the progress bar */
-.main-wrapper .campaign-info progress::-webkit-progress-value {
+.supportersstatusbox progress::-webkit-progress-value {
   background-color: #351C42;
   border-radius: 8px;
 }
 
-.main-wrapper .campaign-info progress::-webkit-progress-bar {
+.supportersstatusbox progress::-webkit-progress-bar {
   background-color: #d2ccd6;
   border-radius: 8px;
 }
 
 /* Firefox-specific customization */
-.main-wrapper progress::-moz-progress-bar {
+.supportersstatusbox progress::-moz-progress-bar {
   background-color: #351C42;
   border-radius: 8px;
 }
 
 /* Internet Explorer/Edge customization */
-.main-wrapper .campaign-info progress[value]::-ms-fill {
+.supportersstatusbox progress[value]::-ms-fill {
   background-color: #351C42;
   border-radius: 8px;
 }
-.main-wrapper .campaign-info .goalsraisedmoney {
+.supportersstatusbox .goalsraisedmoney {
   margin-top: -18px;
   display: block;
 }
-.main-wrapper .campaign-info .w-row {
+.supportersstatusbox .w-row {
   display: flex;
   justify-content: space-between;
 }
-.main-wrapper .campaign-info .w-col-6 {
+.supportersstatusbox .w-col-6 {
   width: 50%;
   float: left;
   min-height: 1px;
   position: relative;
 }
-.main-wrapper .campaign-info .heading-11.goalsraisedmoneytitle {
+.supportersstatusbox .heading-11.goalsraisedmoneytitle {
   color: #000;
   font-size: 14px;
   line-height: 24px;
@@ -91,28 +91,28 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.main-wrapper .campaign-info .campaign-goal-flex {
+.supportersstatusbox .campaign-goal-flex {
   align-items: center;
   display: flex;
 }
-.main-wrapper .campaign-info .heading-9 {
+.supportersstatusbox .heading-9 {
   color: #000;
   text-align: left;
   margin-top: -8px;
   font-size: 17px;
 }
-.main-wrapper .campaign-info .heading-9 {
+.supportersstatusbox .heading-9 {
   color: #000;
   text-align: left;
   margin-top: -8px;
   font-size: 17px;
 }
-.main-wrapper .campaign-info .heading-11.goalsraisedmoneytitle.righttext {
+.supportersstatusbox .heading-11.goalsraisedmoneytitle.righttext {
   text-align: right;
 }
-.main-wrapper .campaign-info .campaign-goal-flex.raised-flex-campaign {
+.supportersstatusbox .campaign-goal-flex.raised-flex-campaign {
   justify-content: flex-end;
 }
-.main-wrapper .campaign-info .heading-9.righttext {
+.supportersstatusbox .heading-9.righttext {
   text-align: right;
 }
