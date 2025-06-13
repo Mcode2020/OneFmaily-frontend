@@ -53,11 +53,6 @@
   border-radius: 8px;
 }
  
-.supportersstatusbox progress::-webkit-progress-bar {
-  background-color: #d2ccd6;
-  border-radius: 8px;
-}
- 
 /* Firefox-specific customization */
 .supportersstatusbox progress::-moz-progress-bar {
   background-color: #351C42;
