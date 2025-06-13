@@ -1,0 +1,540 @@
+/*############################### TOP-IMPACT-CSS-START ###############################*/
+.acc-head {
+    padding-top: 50px;
+}
+.acc-head .heading-22 {
+    color: #000;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 45px;
+    line-height: 65px;
+}
+section.impact-donation {
+    margin-top: 40px;
+    padding-top: 0;
+}
+section.impact-donation .heading-17 {
+    padding-bottom: 10px;
+    font-size: 16px;
+    line-height: 20px;
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+section.impact-donation .grid-3.account-impact-grid {
+    display: grid;
+    grid-column-gap: 30px;
+    grid-row-gap: 30px;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+section.impact-donation .div-block-8 {
+    background-color: #ffc3001a;
+    border-radius: 15px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    display: flex;
+}
+section.impact-donation .div-block-8.eductaed {
+    background-color: #552f881a;
+}
+section.impact-donation .heading-15 {
+    color: #000;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 30px;
+    line-height: 30px;
+}
+section.impact-donation .paragraph-4 {
+    color: #000;
+    text-transform: capitalize;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+section.impact-donation .div-block-10 {
+    background-color: #fff;
+    border-radius: 10px;
+    width: 55px;
+    height: 55px;
+    box-shadow: 0 0 24px #1e073e0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+section.impact-donation .div-block-11 {
+    padding-top: 10px;
+}
+/*############################### TOP-IMPACT-CSS-END ###############################*/
+
+/*############################### RECEIPTS-CSS-START ###############################*/
+.div-block-16.account-receipt-head  {
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    display: flex;
+}
+.account-receipt-head .heading-18.m-0 {
+    font-size: 33px;
+    color: #000;
+    margin: 0;
+}
+.account-receipt-head .div-block-15 {
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    background-color: #f8f9fc;
+    border: 1px solid #e1e6ef;
+    border-radius: 10px;
+    justify-content: center;
+    padding: 12px 15px;
+    display: flex;
+}
+.account-receipt-head .image-10 {
+    width: 19px;
+}
+.account-receipt-head .div-block-17 {
+    background-color: #e1e6ef;
+    width: 2px;
+    height: 30px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.account-receipt-head .heading-25 {
+    color: #000;
+    margin: 0;
+    font-size: 14px;
+    line-height: 28px;
+}
+.div-block-18.account-receipt {
+    border: 2px solid #f1f3f9;
+    border-radius: 20px;
+    padding: 0 1px 1px;
+}
+.account-receipt .w-layout-grid.grid-4 {
+    grid-row-gap: 16px;
+    grid-column-gap: 16px;
+    background-color: #f8f9fc;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    grid-template-rows: auto;
+    grid-template-columns: .75fr .75fr 2.75fr .75fr;
+    align-items: center;
+    grid-auto-columns: 1fr;
+    display: grid;
+}
+.account-receipt .grid-4.back-white {
+    background-color: #fff;
+    align-items: center;
+}
+.account-receipt .form-block {
+    margin-bottom: 0;
+}
+.account-receipt .checkbox-field-2 {
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: fit-content;
+}
+.account-receipt .checkbox-field-2.receipt-top-checkbox {
+    padding-left: 10px !important;
+}
+.account-receipt .heading-21 {
+    color: #000000a6;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 44px;
+}
+.account-receipt .heading-21.t-black {
+    color: #000;
+}
+.account-receipt .heading-21.t-black.account-receipt-amount, .account-receipt .heading-21.t-black.account-receipt-camp-name {
+    font-size: 14px;
+}
+.account-receipt .checkbox-label.black {
+    color: #000;
+}
+.account-receipt .checkbox-label.black.account-check-lable {
+    font-size: 14px;
+}
+.account-receipt .checkbox {
+    -webkit-text-stroke-color: #d0d5dd;
+    zoom: 1.5;
+    border: 1px solid #d0d5dd;
+    font-size: 18px;
+    margin: 0;
+}
+.account-receipt .checkbox-label {
+    color: #000000a6;
+    margin-bottom: 1px;
+    padding-top: 0;
+    padding-left: 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.account-receipt .div-block-19 {
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+}
+.account-receipt .image-14, .account-receipt .image-15 {
+    cursor: pointer;
+}
+
+/****** RECEIPTS-VIEW-MODAL-START ******/
+.div-block-20.receipt-view-modal {
+    z-index: 999;
+    background-color: #000000d1;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    display: none;
+    position: fixed;
+    inset: 0;
+}
+/* .div-block-20.receipt-view-modal {
+    display: flex;
+} */
+.modal.receipt-popup {
+    background-color: #fff;
+    border-radius: 25px;
+    width: 100%;
+    max-width: 790px;
+    margin: auto;
+    padding: 25px;
+}
+.receipt-view-modal .div-block-21.receipt-modal-head {
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 50px;
+    display: flex;
+}
+.receipt-view-modal .heading-23.receipt-title-modal {
+    color: #292d32;
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 44px;
+}
+.receipt-view-modal .div-block-21.receipt-modal-head img.image-15 {
+    cursor: pointer;
+}
+.receipt-view-modal .camp-receipt-modal-body {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 34px;
+    display: flex;
+}
+.receipt-view-modal .camp-receipt-date-text {
+    color: #292d32;
+    margin-top: 0;
+    margin-bottom: 6px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+}
+.receipt-view-modal .camp-receipt-modal-date {
+    color: #292d32;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 18px;
+    line-height: 24px;
+}
+.receipt-view-modal .camp-receipt-status-img {
+    width: 55px;
+    max-width: none;
+    height: 24px;
+}
+.receipt-view-modal .camp-modal-receipt-info-main {
+    border: 1px solid #eaecf0;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+.receipt-view-modal .camp-modal-receipt-info-flex {
+    border-bottom: 1px solid #e1e6ef;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 16px;
+    display: flex;
+}
+.receipt-view-modal .camp-modal-receipt-info-discrip-text {
+    color: #667085;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+}
+.receipt-view-modal .camp-modal-receipt-info-body-title.for-mob {
+    display: none;
+}
+.receipt-view-modal .camp-modal-receipt-info-discrip-text {
+    color: #667085;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+}
+.receipt-view-modal .modal.receipt-popup .camp-modal-receipt-info-body {
+    background-color: #552f880d;
+    border-bottom: 1px solid #e1e6ef;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    display: flex;
+}
+.receipt-view-modal .camp-modal-receipt-info-body-title {
+    color: #292d32;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+}
+.receipt-view-modal .modal.receipt-popup .camp-modal-receipt-info-discrip-text.for-mob {
+    display: none;
+}
+.receipt-view-modal .camp-modal-receipt-info-body-title {
+    color: #292d32;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+}
+.receipt-view-modal .camp-modal-receipt-info-footer {
+    grid-column-gap: 80px;
+    grid-row-gap: 80px;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px;
+    display: flex;
+}
+.receipt-view-modal .camp-modal-receipt-info-footer-text {
+    color: #292d32;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 20px;
+}
+.receipt-view-modal .modal.receipt-popup .camp-modal-receipt-info-footer-text {
+    color: #292d32;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 20px;
+}
+.receipt-view-modal .camp-receipt-modal-footer {
+    grid-column-gap: 25px;
+    grid-row-gap: 25px;
+    display: flex;
+}
+.receipt-view-modal .camp-receipt-modal-down-btn {
+    background-color: #552f88;
+    border-radius: 10px;
+    padding: 12px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
+}
+.receipt-view-modal .camp-receipt-modal-back-btn {
+    color: #552f88;
+    background-color: #0000;
+    border: 1px solid #8d01711a;
+    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+}
+/****** RECEIPTS-VIEW-MODAL-END ******/
+
+.account-receipt-mobile {
+    display: none;
+}
+
+/*############################### RECEIPTS-CSS-END ###############################*/
+
+
+/*############################### MEDIA-QUERY ###############################*/
+@media (max-width: 767px) {
+    .acc-head .heading-22 {   
+        font-size: 25px;
+        line-height: 33px;
+    }
+    section.impact-donation .grid-3.account-impact-grid {
+        grid-column-gap: 10px;
+        grid-row-gap: 10px;
+        grid-template-columns: 1fr;
+    }
+    section.impact-donation .heading-15 {
+        margin-bottom: 10px;
+    }
+    .div-block-16.account-receipt-head {
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .account-receipt-head .heading-18 {
+        font-size: 25px !important;
+        line-height: 33px;
+    }
+    .account-receipt-head .div-block-15 {
+        grid-column-gap: 10px;
+        grid-row-gap: 10px;
+    }
+    .account-receipt-head .heading-25 {
+        font-size: 12px;
+    }
+    .div-block-18.account-receipt {
+        display: none;
+    }
+    .receipt-view-modal .modal.receipt-popup .heading-23.receipt-title-modal {
+        line-height: 26px;
+    }
+    .receipt-view-modal .camp-modal-receipt-info-flex, .receipt-view-modal .camp-modal-receipt-info-body, .receipt-view-modal .camp-modal-receipt-info-body-title.for-mob {
+        display: block !important;
+    }
+    .receipt-view-modal .camp-modal-receipt-info-discrip-text.for-desk {
+        display: none;
+        margin-bottom: 4px;
+    }
+    .receipt-view-modal .camp-modal-receipt-info-body-title.for-desk {
+        display: none;
+    }
+    .receipt-view-modal .modal.receipt-popup .camp-modal-receipt-info-discrip-text.for-mob {
+        display: block;
+        margin-bottom: 4px;
+    }
+    .receipt-view-modal .camp-modal-receipt-info-footer {
+        justify-content: space-between;
+    }
+    .receipt-view-modal .div-block-21.receipt-modal-head {
+        grid-column-gap: 40px;
+        grid-row-gap: 40px;
+        align-items: flex-start;
+        padding-bottom: 40px;
+    }
+    .receipt-view-modal .camp-receipt-modal-body {
+        grid-column-gap: 30px;
+        grid-row-gap: 30px;
+        flex-flow: wrap;
+    }
+    .receipt-view-modal .camp-modal-receipt-info-discrip-text {
+        margin-bottom: 4px;
+    }
+
+    /****** RECEIPTS-MOBILE-VIEW-START ******/
+    .account-receipt-mobile {
+        display: block;
+    }
+    .account-receipt-single-main {
+        background-color: #fff;
+        border: 1px solid #f1f3f9;
+        border-radius: 15px;
+        width: 100%;
+        margin-bottom: 15px;
+        box-shadow: 0 0 14px #0000000d;
+    }
+    .account-receipt-single-head {
+        border-bottom: 2px solid #f1f3f9;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 15px;
+        display: flex;
+    }
+    .account-receipt-amount-text {
+        color: #000000a6;
+        margin-top: 0;
+        margin-bottom: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 20px;
+    }
+    .account-receipt-amount {
+        color: #000;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 24px;
+    }
+    .div-block-19 {
+        grid-column-gap: 10px;
+        grid-row-gap: 10px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        display: flex;
+    }
+    .account-receipt-icons {
+        width: 32px;
+        max-width: none;
+        height: 32px;
+    }
+    .account-receipt-single-body {
+        border-bottom: 2px solid #f1f3f9;
+        padding: 20px 15px;
+    }
+    .account-receipt-mob-camp-name {
+        color: #000;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+    }   
+    .account-receipt-single-body.no-btm-brdr {
+        border-bottom-style: none;
+        border-bottom-width: 0;
+    }
+
+    /****** RECEIPTS-MOBILE-VIEW-END ******/
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .acc-head .heading-22 {
+        font-size: 35px;
+        line-height: 45px;
+    }
+    section.impact-donation {
+        margin-top: 20px;
+    }
+    section.impact-donation .grid-3.account-impact-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 991px) {
+    .account-receipt .checkbox-label.black.account-check-lable {
+        padding-top: 0;
+        font-size: 12px;
+    }
+    .account-receipt .heading-21.t-black.account-receipt-amount {
+        font-size: 12px;
+    }
+    .account-receipt .heading-21.t-black.account-receipt-camp-name {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 80%;
+        font-size: 12px;
+        overflow: hidden;
+    }
+    .receipt-view-modal .modal.receipt-popup {
+        width: 80%;
+        max-width: 80% !important;
+    }
+}
