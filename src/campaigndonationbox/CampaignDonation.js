@@ -44,7 +44,7 @@ const CampaignDonation = () => {
           console.error('Campaign slug is required');
           return;
         }
-        const response = await fetch(`http://localhost:5000/api/payments/${currentCampaignSlug}/${currentGoalAmount}`); // Use state variables
+        const response = await fetch(`https://donate.onefamilee.org/api/payments/${currentCampaignSlug}/${currentGoalAmount}`); // Use state variables
         const data = await response.json();
         setPaymentData({
           supporters: data.totalPayments,

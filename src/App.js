@@ -46,12 +46,15 @@ function App() {
             <p>Shared meals will provide emergency food assistance to families in Palestine</p>
             <CampaignDonation />
             <div className="back-btn">
-              <a href="#">Back</a>
+              <a href="#" onClick={(e) => {
+                e.preventDefault();
+                window.history.back();
+              }}>Back</a>
             </div>
           </div>
           <StripeContainer />
         </div>
-        <DonationTabs />
+        <DonationTabs campaignName="yourCampaign"  slug="campaign2023" goalAmount="700000" />
       </div>
     </div>
   );

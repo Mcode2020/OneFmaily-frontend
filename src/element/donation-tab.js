@@ -4,12 +4,16 @@ import DonationTabs from '../donationtabs/DonationTabs';
 
 class DonationTabsElement extends HTMLElement {
   connectedCallback() {
+    const slug = this.getAttribute('slug');
+    const campaignName = this.getAttribute('campaignName');
+    const email = this.getAttribute('email');
+
+    const goalAmount = this.getAttribute('goalAmount');
     const root = ReactDOM.createRoot(this);
     root.render(
-      <DonationTabs /> 
+      <DonationTabs email={email || ''} campaignName={campaignName || ''} slug={slug || ''} goalAmount={goalAmount || ''} /> 
     );
   }
-
   disconnectedCallback() {
     ReactDOM.createRoot(this).unmount();
   }

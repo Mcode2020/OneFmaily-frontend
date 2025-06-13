@@ -186,13 +186,10 @@ body {
 }
 
 .error-message {
-  color: #e53e3e;
+  color: #dc3545;
   font-size: 0.875rem;
-  margin-top: 0.5rem;
-  padding: 0.75rem;
-  background-color: #fff5f5;
-  border: 1px solid #feb2b2;
-  border-radius: 6px;
+  margin-top: 0.25rem;
+  font-weight: 500;
 }
 
 .success-msg-container {
@@ -483,4 +480,9 @@ body {
 
 .error-messages::-webkit-scrollbar-thumb:hover {
   background: #a0aec0;
+}
+
+.input-error {
+  border-color: #dc3545 !important;
+  background-color: #fff8f8 !important;
 }

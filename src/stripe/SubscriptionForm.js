@@ -49,6 +49,8 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [expiryYearError, setExpiryYearError] = useState("");
+  const [expiryMonthError, setExpiryMonthError] = useState("");
 
   const [totalAmount, setTotalAmount] = useState("");
   const [decodedUrlData, setDecodedUrlData] = useState({
@@ -283,10 +285,42 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
 
   const handleExpiryChange = (e) => {
     const value = e.target.value.replace(/\D/g, '');
-    if (e.target.id === 'expiryMonth' && value.length <= 2) {
-      e.target.value = value;
-    } else if (e.target.id === 'expiryYear' && value.length <= 4) {
-      e.target.value = value;
+    if (e.target.id === 'expiryMonth') {
+      if (value.length <= 2) {
+        const month = parseInt(value);
+        if (value.length < 2) {
+          // Allow partial input while typing
+          e.target.value = value;
+          setExpiryMonthError("");
+        } else if (month >= 1 && month <= 12) {
+          e.target.value = value;
+          setExpiryMonthError("");
+        } else {
+          setExpiryMonthError("Month must be between 01 and 12");
+        }
+      }
+    } else if (e.target.id === 'expiryYear') {
+      const currentYear = new Date().getFullYear();
+      const maxYear = currentYear + 20; // Allow up to 20 years in the future
+      
+      if (value.length <= 4) {
+        const year = parseInt(value);
+        if (year >= currentYear && year <= maxYear) {
+          e.target.value = value;
+          setExpiryYearError("");
+        } else if (value.length < 4) {
+          // Allow partial input while typing
+          e.target.value = value;
+          setExpiryYearError("");
+        } else {
+          // Show error for invalid year
+          if (year < currentYear) {
+            setExpiryYearError("Expiry year cannot be in the past");
+          } else if (year > maxYear) {
+            setExpiryYearError("Expiry year cannot be more than 20 years in the future");
+          }
+        }
+      }
     }
   };
 
@@ -419,7 +453,7 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
 
           console.log('Final payload being sent:', payload);
 
-          const res = await fetch("http://localhost:5000/api/create-subscription", {
+          const res = await fetch("https://donate.onefamilee.org/api/create-subscription", {
             method: "POST",
             headers: { 
               "Content-Type": "application/json",
@@ -529,12 +563,15 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
                 id="expiryMonth"
                 type="text"
                 name="expiryMonth"
-                className="form-input"
+                className={`form-input ${expiryMonthError ? 'input-error' : ''}`}
                 placeholder="MM"
                 maxLength="2"
                 onChange={handleExpiryChange}
                 required
               />
+              {expiryMonthError && (
+                <div className="error-message">{expiryMonthError}</div>
+              )}
             </div>
 
             <div className="form-group">
@@ -545,12 +582,15 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
                 id="expiryYear"
                 type="text"
                 name="expiryYear"
-                className="form-input"
+                className={`form-input ${expiryYearError ? 'input-error' : ''}`}
                 placeholder="YYYY"
                 maxLength="4"
                 onChange={handleExpiryChange}
                 required
               />
+              {expiryYearError && (
+                <div className="error-message">{expiryYearError}</div>
+              )}
             </div>
           </div>
 
