@@ -72,7 +72,7 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
         const storedEmail = localStorage.getItem('userEmail');
         if (!storedEmail) return;
         
-        const response = await fetch(`http://localhost:5000/api/user/${storedEmail}`);
+        const response = await fetch(`https://donate.onefamilee.org/api/user/${storedEmail}`);
         const data = await response.json();
         setUserPayments(data.payments || []);
       } catch (error) {
@@ -129,7 +129,7 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
     };
 
     const encodedData = btoa(JSON.stringify(data));
-    window.location.href = `https://8c0d-2401-4900-1f32-6fb7-691e-e9aa-3717-5b94.ngrok-free.app/?${encodedData}`;
+    window.location.href = `https://donate.onefamilee.org/?${encodedData}`;
   };
 
   const onceTabPrices = [

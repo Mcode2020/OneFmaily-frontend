@@ -8,6 +8,7 @@ import "./donationtabs/DonationTabs.css";
 import StripeContainer from "./stripe/StripeContainer";
 import MyAccount from "./myaccount/MyAccount";
 import MyAccountHeader from "./my-account-header/my-account-header";
+import MainPage from "./stripe/mainpage";
 
 function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -26,15 +27,7 @@ function App() {
     setCurrentPath(path);
   };
 
-  // const renderPage = () => {
-  //   if (currentPath === '/' || currentPath === '/donate') {
-  //     return <DonationPage onNavigate={navigate} />;
-  //   }
-  //   if (currentPath.startsWith('/payment/')) {
-  //     return <PaymentPage />;
-  //   }
-  //   return <DonationPage onNavigate={navigate} />;
-  // };
+
 
   return (
     <div className="App">
@@ -42,23 +35,10 @@ function App() {
         <div className="header-logo">
           <img src="/images/logo.svg" alt="Logo" />
         </div>
-        <div className="main-wrapper">
-          <div className="campaign-info">
-            <h2>We are committed to environmental conservation.</h2>
-            <p>Shared meals will provide emergency food assistance to families in Palestine</p>
-            {/* <CampaignDonation currentCampaignSlug="campaign2023" currentGoalAmount="700000" /> */}
-            <div className="back-btn">
-              <a href="#" onClick={(e) => {
-                e.preventDefault();
-                window.history.back();
-              }}>Back</a>
-            </div>
-          </div>
-          {/* <StripeContainer /> */}
-        </div>
-        <DonationTabs campaignName="yourCampaign"  slug="campaign2023" goalAmount="700000" />
-        <MyAccountHeader />
-        <MyAccount />
+        <MainPage />
+        {/* <DonationTabs campaignName="yourCampaign"  slug="campaign2023" goalAmount="700000" /> */}
+        {/* <MyAccountHeader /> */}
+        {/* <MyAccount /> */}
       </div>
     </div>
   );
