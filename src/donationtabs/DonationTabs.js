@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './DonationTabs.css';
 
-const DonationTabs = ({ campaignName = "campaign2023", email, slug, goalAmount }) => {
+const DonationTabs = ({ campaignName, slug, goalAmount }) => {
   const [activeTab, setActiveTab] = useState('once');
   const [selectedPrice, setSelectedPrice] = useState(1500);
   const [customAmount, setCustomAmount] = useState('');
@@ -13,6 +13,13 @@ const DonationTabs = ({ campaignName = "campaign2023", email, slug, goalAmount }
   const [urlGoalAmount, setUrlGoalAmount] = useState(0);
   const [userPayments, setUserPayments] = useState([]);
   const [currentCampaign, setCurrentCampaign] = useState(campaignName);
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    // Get email from localStorage
+    const storedEmail = localStorage.getItem('userEmail');
+    setUserEmail(storedEmail || '');
+  }, []);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -62,9 +69,10 @@ const DonationTabs = ({ campaignName = "campaign2023", email, slug, goalAmount }
 
     const fetchUserPayments = async () => {
       try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('u') || urlParams.get('user_id') || '1';
-        const response = await fetch(`https://donate.onefamilee.org/api/user/${email}`);
+        const storedEmail = localStorage.getItem('userEmail');
+        if (!storedEmail) return;
+        
+        const response = await fetch(`http://localhost:5000/api/user/${storedEmail}`);
         const data = await response.json();
         setUserPayments(data.payments || []);
       } catch (error) {
@@ -101,8 +109,9 @@ const DonationTabs = ({ campaignName = "campaign2023", email, slug, goalAmount }
       return;
     }
 
-    // Check if email exists
-    if (!email) {
+    // Check if email exists in localStorage
+    const storedEmail = localStorage.getItem('userEmail');
+    if (!storedEmail) {
       // Redirect to login page if no email found
       window.location.href = '/log-in';
       return;
@@ -114,13 +123,13 @@ const DonationTabs = ({ campaignName = "campaign2023", email, slug, goalAmount }
       type: activeTab === 'once' ? 'one-time' : 'recurring',
       firstName: "John",
       lastName: "Doe",
-      email: email,
+      email: storedEmail,
       redirectUrl: window.location.href,
       goalAmount: goalAmount
     };
 
     const encodedData = btoa(JSON.stringify(data));
-    window.location.href = `https://donate.onefamilee.org/?${encodedData}`;
+    window.location.href = `https://8c0d-2401-4900-1f32-6fb7-691e-e9aa-3717-5b94.ngrok-free.app/?${encodedData}`;
   };
 
   const onceTabPrices = [

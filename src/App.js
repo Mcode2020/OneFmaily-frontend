@@ -6,6 +6,8 @@ import CampaignDonation from "./campaigndonationbox/CampaignDonation";
 import DonationTabs from "./donationtabs/DonationTabs";
 import "./donationtabs/DonationTabs.css";
 import StripeContainer from "./stripe/StripeContainer";
+import MyAccount from "./myaccount/MyAccount";
+import MyAccountHeader from "./my-account-header/my-account-header";
 
 function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -44,7 +46,7 @@ function App() {
           <div className="campaign-info">
             <h2>We are committed to environmental conservation.</h2>
             <p>Shared meals will provide emergency food assistance to families in Palestine</p>
-            <CampaignDonation />
+            {/* <CampaignDonation currentCampaignSlug="campaign2023" currentGoalAmount="700000" /> */}
             <div className="back-btn">
               <a href="#" onClick={(e) => {
                 e.preventDefault();
@@ -52,9 +54,11 @@ function App() {
               }}>Back</a>
             </div>
           </div>
-          <StripeContainer />
+          {/* <StripeContainer /> */}
         </div>
         <DonationTabs campaignName="yourCampaign"  slug="campaign2023" goalAmount="700000" />
+        <MyAccountHeader />
+        <MyAccount />
       </div>
     </div>
   );

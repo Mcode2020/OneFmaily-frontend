@@ -203,9 +203,9 @@ section.impact-donation .div-block-11 {
     position: fixed;
     inset: 0;
 }
-/* .div-block-20.receipt-view-modal {
+.div-block-20.receipt-view-modal.show-modal {
     display: flex;
-} */
+}
 .modal.receipt-popup {
     background-color: #fff;
     border-radius: 25px;
@@ -368,6 +368,60 @@ section.impact-donation .div-block-11 {
     display: none;
 }
 
+/*############################### RECEIPTS-CSS-START ###############################*/
+.date-picker-input {
+    border: none;
+    background: transparent;
+    color: #000;
+    font-size: 14px;
+    line-height: 28px;
+    padding: 0;
+    cursor: pointer;
+    width: auto; /* Adjust width to fit content */
+    text-align: left; /* Align text to the left */
+}
+
+.date-picker-input:focus {
+    outline: none;
+}
+
+.react-datepicker-wrapper {
+    display: inline-block; /* Ensure it behaves like inline text */
+}
+
+.react-datepicker__header {
+    background-color: #f8f9fc; /* Match the header background */
+    border-bottom: 1px solid #e1e6ef;
+}
+
+.react-datepicker__current-month, .react-datepicker__day-name {
+    color: #000; /* Text color for month and day names */
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+    background-color: #ffc300; /* Highlight color for selected date */
+    color: #fff;
+}
+
+.react-datepicker__day--outside-month {
+    color: #ccc; /* Dim dates outside the current month */
+}
+
+.pagination-controls button {
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    width: 112px;
+    padding: 8px 12px;
+    display: flex;
+    gap: 8px;
+    color: #344054;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 600;
+}
 /*############################### RECEIPTS-CSS-END ###############################*/
 
 
@@ -534,7 +588,7 @@ section.impact-donation .div-block-11 {
         overflow: hidden;
     }
     .receipt-view-modal .modal.receipt-popup {
-        width: 80%;
-        max-width: 80% !important;
+        width: 90%;
+        max-width: 90% !important;
     }
 }

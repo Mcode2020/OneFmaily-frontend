@@ -6,12 +6,11 @@ class DonationTabsElement extends HTMLElement {
   connectedCallback() {
     const slug = this.getAttribute('slug');
     const campaignName = this.getAttribute('campaignName');
-    const email = this.getAttribute('email');
 
     const goalAmount = this.getAttribute('goalAmount');
     const root = ReactDOM.createRoot(this);
     root.render(
-      <DonationTabs email={email || ''} campaignName={campaignName || ''} slug={slug || ''} goalAmount={goalAmount || ''} /> 
+      <DonationTabs campaignName={campaignName || ''} slug={slug || ''} goalAmount={goalAmount || ''} /> 
     );
   }
   disconnectedCallback() {

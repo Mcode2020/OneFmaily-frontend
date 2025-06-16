@@ -324,37 +324,6 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
     }
   };
 
-  // Add address validation functions
-  const validateAddress = (address) => {
-    const errors = [];
-    
-    if (!address.line1 || address.line1.trim().length < 5) {
-      errors.push("Address Line 1 must be at least 5 characters long");
-    }
-    
-    if (address.line2 && address.line2.trim().length < 3) {
-      errors.push("Address Line 2 must be at least 3 characters long if provided");
-    }
-    
-    if (!address.city || address.city.trim().length < 2) {
-      errors.push("City is required and must be at least 2 characters long");
-    }
-    
-    if (!address.state || address.state.trim().length < 2) {
-      errors.push("State is required and must be at least 2 characters long");
-    }
-    
-    if (!address.postalCode || !/^\d{5}(-\d{4})?$/.test(address.postalCode)) {
-      errors.push("Postal Code must be in valid format (e.g., 12345 or 12345-6789)");
-    }
-    
-    if (!address.country || address.country.trim().length < 2) {
-      errors.push("Country is required and must be at least 2 characters long");
-    }
-    
-    return errors;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -381,14 +350,6 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
     const year = document.getElementById("expiryYear").value;
     if (!validateExpiryDate(month, year)) {
       setError("Please enter a valid expiry date");
-      setLoading(false);
-      return;
-    }
-
-    // Validate address
-    const addressErrors = validateAddress(formData.address);
-    if (addressErrors.length > 0) {
-      setError(addressErrors.join("\n"));
       setLoading(false);
       return;
     }
@@ -690,7 +651,6 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
                 type="text"
                 className="form-input"
                 placeholder="Postal code"
-                required
                 value={formData.address.postalCode}
                 onChange={handleInputChange}
               />

@@ -5,7 +5,8 @@ const common = require('./webpack.common');
 const entries = {
     'donation': './src/element/donation-tab.js',
     'campaign-donation': './src/element/campaign-donation.js',
-   
+    'my-account': './src/element/my-account.js',
+    'my-account-header':'./src/element/my-account-header.js'
 };
 
 module.exports = merge(common, {
