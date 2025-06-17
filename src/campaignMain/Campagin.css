@@ -1,0 +1,118 @@
+.camp-supporter .supportersbox {
+  align-items: center;
+  margin-top: -6px;
+  display: flex;
+}
+.camp-supporter .campaign-supp-icon {
+    max-width: none;
+    height: 15px;
+    width: 20px !important;
+}
+.camp-supporter .heading-2 {
+    color: #351c42;
+    margin-left: 5px;
+    font-weight: 500;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 10px;
+}
+.camp-supporter .prograssbar {
+    margin-top: 10px;
+}
+.camp-supporter .skill {
+  margin-bottom: 24px;
+}
+.camp-supporter .progres-bar-2 {
+  background-color: #161616;
+  border-radius: 90px;
+  flex: 0 auto;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100px;
+  height: 14px;
+  margin-right: 8px;
+  padding: 4px;
+  display: flex;
+  position: relative;
+}
+.camp-supporter .progres-bar-2.card-bar {
+  opacity: 1;
+  color: #774d8c;
+  background-color: #d2ccd6;
+  border-radius: 90px;
+  width: 100%;
+  height: 5px;
+  padding: 0;
+}
+.camp-supporter progress {
+  appearance: none;
+  border-radius: 8px;
+  background-color: #ddd;
+  width: 100%;
+  height: 4px;
+}
+/* Customize the filled portion (value) of the progress bar */
+.camp-supporter progress::-webkit-progress-value {
+  background-color: #351C42;
+  border-radius: 8px;
+}
+ 
+/* Firefox-specific customization */
+.camp-supporter progress::-moz-progress-bar {
+  background-color: #351C42;
+  border-radius: 8px;
+}
+ 
+/* Internet Explorer/Edge customization */
+.camp-supporter progress[value]::-ms-fill {
+  background-color: #351C42;
+  border-radius: 8px;
+}
+.camp-supporter .goalsraisedmoney {
+  margin-top: -18px;
+  display: block;
+}
+.camp-supporter .w-row {
+  display: flex;
+  justify-content: space-between;
+}
+.camp-supporter .w-col-6 {
+  width: 50%;
+  float: left;
+  min-height: 1px;
+  position: relative;
+}
+.camp-supporter .heading-11.goalsraisedmoneytitle {
+  color: #000;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.camp-supporter .campaign-goal-flex {
+  align-items: center;
+  display: flex;
+}
+.camp-supporter .heading-9 {
+  color: #000;
+  text-align: left;
+  margin-top: -8px;
+  font-size: 17px;
+}
+.camp-supporter .heading-9 {
+  color: #000;
+  text-align: left;
+  margin-top: -8px;
+  font-size: 17px;
+}
+.camp-supporter .heading-11.goalsraisedmoneytitle.righttext {
+  text-align: right;
+}
+.camp-supporter .campaign-goal-flex.raised-flex-campaign {
+  justify-content: flex-end;
+}
+.camp-supporter .heading-9.righttext {
+  text-align: right;
+}

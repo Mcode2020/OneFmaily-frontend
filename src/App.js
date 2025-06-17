@@ -9,6 +9,7 @@ import StripeContainer from "./stripe/StripeContainer";
 import MyAccount from "./myaccount/MyAccount";
 import MyAccountHeader from "./my-account-header/my-account-header";
 import MainPage from "./stripe/mainpage";
+import CampaignMain from "./campaignMain/CampaignMain";
 
 function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -40,7 +41,8 @@ function App() {
         {/* <MyAccountHeader /> */}
         {/* <MyAccount /> */}
         {/* <CampaignDonation currentcampaignslug="unlocking-opportunities-breaking-the-cycle-of-poverty" currentgoalamount="10000"/> */}
-        <MyAccount />
+        {/* <MyAccount /> */}
+        <CampaignMain currentcampaignslug="unlocking-opportunities-breaking-the-cycle-of-poverty" currentgoalamount="10000" />
       </div>
     </div>
   );
