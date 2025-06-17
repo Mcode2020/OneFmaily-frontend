@@ -4,15 +4,19 @@ import './DonationTabs.css';
 const DonationTabs = ({ campaignName, slug, goalAmount }) => {
   const [activeTab, setActiveTab] = useState('once');
   const [selectedPrice, setSelectedPrice] = useState(1500);
-  const [customAmount, setCustomAmount] = useState('');
+  const [customAmount, setCustomAmount] = useState('1500');
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [campaignData, setCampaignData] = useState({
+    campaign_slug: '',
+    totalPayments: 0,
     totalAmount: 0,
-    goalAmount: 0,
-    donations: []
+    goals: 0,
+    percentage: '0'
   });
   const [urlGoalAmount, setUrlGoalAmount] = useState(0);
   const [userPayments, setUserPayments] = useState([]);
-  const [currentCampaign, setCurrentCampaign] = useState(campaignName);
+  const [currentCampaign, setCurrentCampaign] = useState(slug);
   const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
@@ -24,8 +28,8 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     let goalAmount = parseInt(urlParams.get('g') || '600000', 10);
-    let campaign = campaignName;
-
+    let campaign = slug;
+console.log(slug,"0000000000000000")
     const encodedData = window.location.search.substring(1);
     if (encodedData && encodedData.length > 100) { 
       try {
@@ -70,8 +74,17 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
     const fetchUserPayments = async () => {
       try {
         const storedEmail = localStorage.getItem('userEmail');
+        console.log(storedEmail,"storedemail")
         if (!storedEmail) return;
         
+        // First call webflow-user API
+        const webflowResponse = await fetch(`https://donate.onefamilee.org/api/webflow-user/${storedEmail}`);
+        if (!webflowResponse.ok) {
+          console.error('Error fetching webflow user data');
+          return;
+        }
+        
+        // After webflow-user API is successful, call user payments API
         const response = await fetch(`https://donate.onefamilee.org/api/user/${storedEmail}`);
         const data = await response.json();
         setUserPayments(data.payments || []);
@@ -103,9 +116,15 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
 
   const handleDonateSubmit = (e) => {
     e.preventDefault();
+    setErrorMessage('');
     
     if (!customAmount && !selectedPrice) {
-      alert('Please enter or select an amount');
+      setErrorMessage('Please enter or select an amount');
+      return;
+    }
+
+    if (!isCheckboxChecked) {
+      setErrorMessage('Please check the checkbox to proceed with donation');
       return;
     }
 
@@ -127,6 +146,7 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
       redirectUrl: window.location.href,
       goalAmount: goalAmount
     };
+    console.log(slug,"777777777777777777777777777777777777")
 
     const encodedData = btoa(JSON.stringify(data));
     window.location.href = `https://donate.onefamilee.org/?${encodedData}`;
@@ -198,11 +218,26 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
               onChange={handleCustomAmountChange}
             />
             <label className="w-checkbox checkbox-field">
-              <input type="checkbox" name="checkbox" id="checkbox" data-name="Checkbox" />
+              <input 
+                type="checkbox" 
+                name="checkbox" 
+                id="checkbox" 
+                data-name="Checkbox"
+                checked={isCheckboxChecked}
+                onChange={(e) => {
+                  setIsCheckboxChecked(e.target.checked);
+                  setErrorMessage('');
+                }}
+              />
               <span className="campaign-right-checkbox-text w-form-label">
                 Yes, I want to see how I'm helping to provide food for children, families and communities in need. Send me occasional updates.
               </span>
             </label>
+            {errorMessage && (
+              <div className="error-message" style={{ color: 'red', marginTop: '5px', fontSize: '14px' }}>
+                {errorMessage}
+              </div>
+            )}
             <div className="campaign-detail-donate-btn">
               <input type="submit" className="campaign-right-donate-btn w-button" value="Donate" />
             </div>
@@ -237,11 +272,26 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
               onChange={handleCustomAmountChange}
             />
             <label className="w-checkbox checkbox-field">
-              <input type="checkbox" name="checkbox" id="checkbox" data-name="Checkbox" />
+              <input 
+                type="checkbox" 
+                name="checkbox" 
+                id="checkbox" 
+                data-name="Checkbox"
+                checked={isCheckboxChecked}
+                onChange={(e) => {
+                  setIsCheckboxChecked(e.target.checked);
+                  setErrorMessage('');
+                }}
+              />
               <span className="campaign-right-checkbox-text w-form-label">
                 Yes, I want to see how I'm helping to provide food for children, families and communities in need. Send me occasional updates.
               </span>
             </label>
+            {errorMessage && (
+              <div className="error-message" style={{ color: 'red', marginTop: '5px', fontSize: '14px' }}>
+                {errorMessage}
+              </div>
+            )}
             <div className="campaign-detail-donate-btn">
               <input type="submit" className="campaign-right-donate-btn w-button" value="Donate" />
             </div>
@@ -258,9 +308,7 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
                   <h4 class="tablerow2_text">Raised</h4>
                   </div>
                   <h4 class="card-text tablerow2_righttext">
-                    {typeof campaignData?.totalAmount === 'number' && !isNaN(campaignData.totalAmount)
-                      ? `$${campaignData.totalAmount.toLocaleString()}`
-                      : '$0'}
+                    {campaignData?.totalPayments || 0}
                   </h4>
               </div>
               <div class="customborder customborder2 border_b_0">
@@ -286,9 +334,7 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
                   <h4 class="tablerow2_text">Donations</h4>
                   </div>
                   <h4 class="card-text tablerow2_righttext">
-                    {campaignData?.totalAmount && urlGoalAmount
-                      ? Math.round((campaignData.totalAmount / urlGoalAmount) * 100)
-                      : 0}%
+                    {campaignData?.percentage || '0'}%
                   </h4>
               </div>
           </div>

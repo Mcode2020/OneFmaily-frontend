@@ -2,24 +2,26 @@ import React, { useState, useEffect } from 'react'
 import "./CampaignDonation.css";
 import BASE_URL from '../BaseUrl';
 
-const CampaignDonation = ({ currentCampaignSlug, currentGoalAmount }) => {
+const CampaignDonation = ({ currentcampaignslug, currentgoalamount }) => {
   const [paymentData, setPaymentData] = useState({
     supporters: 0,
-    raisedAmount: 0
+    raisedAmount: 0,
+    percentage: '0'
   });
-console.log(currentCampaignSlug, currentGoalAmount,'currentCampaignSlug, currentGoalAmount');
+console.log(currentcampaignslug, currentgoalamount,'currentcampaignslug, currentgoalamount');
   useEffect(() => {
     const fetchPaymentData = async () => {
       try {
-        if (!currentCampaignSlug) {
+        if (!currentcampaignslug) {
           console.error('Campaign slug is required');
           return;
         }
-        const response = await fetch(`https://donate.onefamilee.org/api/payments/${currentCampaignSlug}/${currentGoalAmount}`);
+        const response = await fetch(`https://donate.onefamilee.org/api/payments/${currentcampaignslug}/${currentgoalamount}`);
         const data = await response.json();
         setPaymentData({
           supporters: data.totalPayments,
-          raisedAmount: parseFloat(data.totalAmount || '0') || 0
+          raisedAmount: parseFloat(data.totalAmount || '0') || 0,
+          percentage: data.percentage || '0'
         });
       } catch (error) {
         console.error('Error fetching payment data:', error);
@@ -27,9 +29,7 @@ console.log(currentCampaignSlug, currentGoalAmount,'currentCampaignSlug, current
     };
 
     fetchPaymentData();
-  }, [currentCampaignSlug, currentGoalAmount]);
-
-  const progressPercentage = (paymentData.raisedAmount / currentGoalAmount) * 100;
+  }, [currentcampaignslug, currentgoalamount]);
 
   return (
     <div className="supportersstatusbox desk-show">
@@ -40,7 +40,7 @@ console.log(currentCampaignSlug, currentGoalAmount,'currentCampaignSlug, current
         <div className="prograssbar">
             <div className="skill">
                 <div className="progres-bar-2 card-bar">
-                <progress value={paymentData.raisedAmount} max={currentGoalAmount}></progress>
+                <progress value={paymentData.percentage} max="100"></progress>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@ console.log(currentCampaignSlug, currentGoalAmount,'currentCampaignSlug, current
                     <div className="campaign-goal-flex">
                         <h4 className="heading-9">$</h4>
                         <h4 className="heading-9">
-                        {currentGoalAmount ? currentGoalAmount : '0'}
+                        {currentgoalamount ? currentgoalamount.toLocaleString() : '0'}
                         </h4>
                     </div>
                 </div>

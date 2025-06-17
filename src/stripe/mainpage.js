@@ -8,7 +8,7 @@ const mainpage = () => {
     <div className="campaign-info">
       <h2>We are committed to environmental conservation.</h2>
       <p>Shared meals will provide emergency food assistance to families in Palestine</p>
-      <CampaignDonation currentCampaignSlug="" currentGoalAmount="" />
+      <CampaignDonation currentcampaignslug="" currentgoalamount="" />
       <div className="back-btn">
         <a href="#" onClick={(e) => {
           e.preventDefault();

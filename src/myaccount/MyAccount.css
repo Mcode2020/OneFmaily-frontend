@@ -92,6 +92,8 @@ section.impact-donation .div-block-11 {
     justify-content: center;
     padding: 12px 15px;
     display: flex;
+    position: relative;
+    z-index: 2;
 }
 .account-receipt-head .image-10 {
     width: 19px;
@@ -424,7 +426,6 @@ section.impact-donation .div-block-11 {
 }
 /*############################### RECEIPTS-CSS-END ###############################*/
 
-
 /*############################### MEDIA-QUERY ###############################*/
 @media (max-width: 767px) {
     .acc-head .heading-22 {   
@@ -591,4 +592,23 @@ section.impact-donation .div-block-11 {
         width: 90%;
         max-width: 90% !important;
     }
+}
+
+/* Add styles for the calendar container */
+.react-datepicker-popper {
+    z-index: 1000 !important;
+}
+
+.react-datepicker-wrapper {
+    position: relative;
+}
+
+/* Ensure the calendar appears above other content */
+.react-datepicker {
+    position: absolute !important;
+    z-index: 1000 !important;
+    background-color: white;
+    border: 1px solid #e1e6ef;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

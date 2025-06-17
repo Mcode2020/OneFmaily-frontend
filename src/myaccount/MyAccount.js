@@ -24,7 +24,7 @@ const MyAccount = () => {
   const fetchPayments = async (date) => {
     try {
       const formattedDate = formatDateForAPI(date);
-      const response = await fetch(`https://donate.onefamilee.org/api/all-payments?start_date=${formattedDate}`);
+      const response = await fetch(`http://localhost:5000/api/all-payments?start_date=${formattedDate}`);
       const data = await response.json();
       if (data.success) {
         setPayments(data.data);
