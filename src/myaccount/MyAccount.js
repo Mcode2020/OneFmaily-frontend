@@ -3,6 +3,8 @@ import './MyAccount.css';
 import jsPDF from 'jspdf';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import CampaignTabs from "../campaignTabs/campaignTabs";
+
 
 const MyAccount = () => {
   const [totalAmount, setTotalAmount] = useState('$0');
@@ -23,8 +25,15 @@ const MyAccount = () => {
 
   const fetchPayments = async (date) => {
     try {
+      const userEmail = localStorage.getItem('userEmail');
+      if (!userEmail) {
+        console.error('No user email found in localStorage');
+        setPayments([]);
+        setNoDataFound(true);
+        return;
+      }
       const formattedDate = formatDateForAPI(date);
-      const response = await fetch(`http://localhost:5000/api/all-payments?start_date=${formattedDate}`);
+      const response = await fetch(`https://donate.onefamilee.org/api/all-payments/${userEmail}?start_date=${formattedDate}`);
       const data = await response.json();
       if (data.success) {
         setPayments(data.data);
@@ -170,7 +179,10 @@ const MyAccount = () => {
 
   return (
     <>
-        {/*------------------------- TOP-IMPACT-PART-END ---------------------*/}
+        {/*------------------------- CAMPAIGN-TABS-START ---------------------*/}
+        <CampaignTabs />
+        {/*------------------------- CAMPAIGN-TABS-END ---------------------*/}
+
 
         {/*------------------------- RECEIPTS-PART-START ---------------------*/}
         <div className="div-block-16 account-receipt-head">
@@ -262,19 +274,17 @@ const MyAccount = () => {
                 <button 
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    style={{ padding: '8px 16px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+                    className="pagination-button"
                 >
-                    Previous
+                    &larr; Previous
                 </button>
-                <span style={{ padding: '8px 16px' }}>
-                    Page {currentPage} of {Math.ceil(payments.length / 10)}
-                </span>
+                
                 <button 
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(payments.length / 10)))}
                     disabled={currentPage === Math.ceil(payments.length / 10)}
-                    style={{ padding: '8px 16px', cursor: currentPage === Math.ceil(payments.length / 10) ? 'not-allowed' : 'pointer' }}
+                    className="pagination-button"
                 >
-                    Next
+                    Next &rarr;
                 </button>
             </div>
         </div>
@@ -334,16 +344,16 @@ const MyAccount = () => {
                 <button 
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    style={{ cursor: currentPage === 1 ? 'not-allowed' : 'pointer'}}
+                    className="pagination-button"
                 >
-                    <img src="https://donate.onefamilee.org/images/slider-left.svg" /> Previous
+                    &larr; Previous
                 </button>
                 <button 
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(payments.length / 4)))} 
                     disabled={currentPage === Math.ceil(payments.length / 4)}
-                    style={{ cursor: currentPage === Math.ceil(payments.length / 4) ? 'not-allowed' : 'pointer'}}
+                    className="pagination-button"
                 >
-                    Next <img src="https://donate.onefamilee.org/images/slider-right.svg" />
+                    Next &rarr;
                 </button>
             </div>
         </div>

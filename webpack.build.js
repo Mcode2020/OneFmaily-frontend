@@ -6,7 +6,8 @@ const entries = {
     'donation': './src/element/donation-tab.js',
     'campaign-donation': './src/element/campaign-donation.js',
     'my-account': './src/element/my-account.js',
-    'my-account-header':'./src/element/my-account-header.js'
+    'my-account-header':'./src/element/my-account-header.js',
+    'campaign-main': './src/element/campaign-main.js'
 };
 
 module.exports = merge(common, {

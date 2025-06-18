@@ -16,6 +16,7 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
   });
   const [urlGoalAmount, setUrlGoalAmount] = useState(0);
   const [userPayments, setUserPayments] = useState([]);
+  const [hasDonations, setHasDonations] = useState(false);
   const [currentCampaign, setCurrentCampaign] = useState(slug);
   const [userEmail, setUserEmail] = useState('');
 
@@ -27,7 +28,7 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    let goalAmount = parseInt(urlParams.get('g') || '600000', 10);
+    // let goalAmount = parseInt(urlParams.get('g') || '600000', 10);
     let campaign = slug;
 console.log(slug,"0000000000000000")
     const encodedData = window.location.search.substring(1);
@@ -63,7 +64,7 @@ console.log(slug,"0000000000000000")
 
     const fetchCampaignData = async () => {
       try {
-        const response = await fetch(`https://donate.onefamilee.org/api/payments/${currentCampaign}/${urlGoalAmount}`);
+        const response = await fetch(`https://donate.onefamilee.org/api/payments/${currentCampaign}/${goalAmount}`);
         const data = await response.json();
         setCampaignData(data);
       } catch (error) {
@@ -74,22 +75,31 @@ console.log(slug,"0000000000000000")
     const fetchUserPayments = async () => {
       try {
         const storedEmail = localStorage.getItem('userEmail');
-        console.log(storedEmail,"storedemail")
-        if (!storedEmail) return;
+        let response;
         
-        // First call webflow-user API
-        const webflowResponse = await fetch(`https://donate.onefamilee.org/api/webflow-user/${storedEmail}`);
-        if (!webflowResponse.ok) {
-          console.error('Error fetching webflow user data');
-          return;
+        if (storedEmail) {
+          // First call webflow-user API
+          const webflowResponse = await fetch(`https://donate.onefamilee.org/api/webflow-user/${storedEmail}`);
+          if (!webflowResponse.ok) {
+            console.error('Error fetching webflow user data');
+            return;
+          }
+          
+          // After webflow-user API is successful, call user payments API
+          response = await fetch(`https://donate.onefamilee.org/api/user/${storedEmail}/${slug}`);
+        } else {
+          // If no email, call the payments-by-slug API
+          response = await fetch(`https://donate.onefamilee.org/api/payments-by-slug/${slug}`);
         }
-        
-        // After webflow-user API is successful, call user payments API
-        const response = await fetch(`https://donate.onefamilee.org/api/user/${storedEmail}`);
+
         const data = await response.json();
-        setUserPayments(data.payments || []);
+        const payments = data.payments || [];
+        setUserPayments(payments);
+        setHasDonations(payments.length > 0);
       } catch (error) {
         console.error('Error fetching user payments:', error);
+        setUserPayments([]);
+        setHasDonations(false);
       }
     };
 
@@ -101,6 +111,9 @@ console.log(slug,"0000000000000000")
     console.log(tab,"tab")
     e.preventDefault();
     setActiveTab(tab);
+    // Reset amount when switching tabs
+    setSelectedPrice(0);
+    setCustomAmount('');
   };
 
   const handlePriceClick = (price, e) => {
@@ -123,11 +136,6 @@ console.log(slug,"0000000000000000")
       return;
     }
 
-    if (!isCheckboxChecked) {
-      setErrorMessage('Please check the checkbox to proceed with donation');
-      return;
-    }
-
     // Check if email exists in localStorage
     const storedEmail = localStorage.getItem('userEmail');
     if (!storedEmail) {
@@ -137,16 +145,19 @@ console.log(slug,"0000000000000000")
     }
 
     const data = {
-      campaign: slug,
+      currentcampaignslug: currentCampaign,
       amount: customAmount || selectedPrice,
       type: activeTab === 'once' ? 'one-time' : 'recurring',
-      firstName: "John",
+      firstName: "testUser",
       lastName: "Doe",
       email: storedEmail,
       redirectUrl: window.location.href,
-      goalAmount: goalAmount
+      currentgoalamount: urlGoalAmount,
+      campaignName: campaignName,
+      customerEmail: storedEmail,
+      customerName: "John Doe"
     };
-    console.log(slug,"777777777777777777777777777777777777")
+    console.log(currentCampaign,"777777777777777777777777777777777777")
 
     const encodedData = btoa(JSON.stringify(data));
     window.location.href = `https://donate.onefamilee.org/?${encodedData}`;
@@ -248,7 +259,6 @@ console.log(slug,"0000000000000000")
         <div className={`campaign-right-tab-content w-tab-pane ${activeTab === 'monthly' ? 'w--tab-active' : ''}`} id="monthly-tab">
           <h4 className="campaign-right-donate">Donate</h4>
           <h2 className="campaign-right-tab-price">${customAmount || selectedPrice}</h2>
-          <h3 className="campaign-right-meal-text">10 Meals</h3>
 
           <div className="campaign-right-btn-flex">
             {monthlyTabPrices.map((price) => (
@@ -308,7 +318,7 @@ console.log(slug,"0000000000000000")
                   <h4 class="tablerow2_text">Raised</h4>
                   </div>
                   <h4 class="card-text tablerow2_righttext">
-                    {campaignData?.totalPayments || 0}
+                    {campaignData?.totalAmount || 0}
                   </h4>
               </div>
               <div class="customborder customborder2 border_b_0">
@@ -320,9 +330,7 @@ console.log(slug,"0000000000000000")
                   <h4 class="tablerow2_text">Goal</h4>
                   </div>
                   <h4 class="card-text tablerow2_righttext">
-                    {typeof urlGoalAmount === 'number' && !isNaN(urlGoalAmount)
-                      ? `$${urlGoalAmount.toLocaleString()}`
-                      : '$0'}
+                  {goalAmount}
                   </h4>
               </div>
               <div class="customborder customborder2 border_b_0">
@@ -339,7 +347,9 @@ console.log(slug,"0000000000000000")
               </div>
           </div>
 
-          <div className="donation-receive-list">
+          <h3 className="donation-received-heading">{userPayments.length > 0 ? 'Donation Received' : 'No donations found'}</h3>
+          {userPayments.length > 0 && (
+            <div className="donation-receive-list">
               {userPayments.map((payment, index) => {
                 const amount = parseFloat(payment?.amount || '0');
                 return (
@@ -363,7 +373,8 @@ console.log(slug,"0000000000000000")
                   </React.Fragment>
                 );
               })}
-          </div>
+            </div>
+          )}
     </div>
     </>
   );

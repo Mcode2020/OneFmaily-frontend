@@ -98,16 +98,17 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
           ...prevData,
           type: decodedData.type || "one-time",
           amount: decodedData.amount,
-          campaignName: decodedData.campaign || "",
+          campaignName: decodedData.campaignName || "",
           firstName: decodedData.firstName || "",
           lastName: decodedData.lastName || "",
-          email: `${decodedData.firstName}.${decodedData.lastName}@example.com`.toLowerCase(),
+          email: decodedData.customerEmail || "",
           user_id: decodedData.user_id || "1",
           redirectUrl: decodedData.redirectUrl || "",
           address: initialAddressFields
         }));
       } else {
         console.log('No encoded data found in URL');
+        console.log(decodeFormData,"5555555555555555555555")
       }
     } catch (error) {
       console.error("Error decoding URL parameters:", error);
@@ -430,6 +431,25 @@ const SubscriptionForm = ({ onPaymentSuccess }) => {
 
           const data = await res.json();
           console.log('Success response:', data);
+          
+          // Make additional API call to collection endpoint
+          try {
+            const collectionResponse = await fetch("https://donate.onefamilee.org/api/collection", {
+              method: "GET",
+              headers: {
+                "Accept": "application/json"
+              }
+            });
+
+            if (!collectionResponse.ok) {
+              console.error("Collection API error:", await collectionResponse.text());
+            } else {
+              console.log("Collection API success:", await collectionResponse.json());
+            }
+          } catch (collectionError) {
+            console.error("Error calling collection API:", collectionError);
+          }
+
           setSuccess(true);
           if (onPaymentSuccess) {
             onPaymentSuccess(data);

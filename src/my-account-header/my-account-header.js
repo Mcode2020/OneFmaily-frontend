@@ -4,29 +4,43 @@ import '../myaccount/MyAccount.css';
 const MyAccountHeader = () => {
   const [totalAmount, setTotalAmount] = useState('$0');
   const [lifetimeTotal, setLifetimeTotal] = useState('$0');
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
-    const fetchTotalAmount = async () => {
+    const fetchUserData = async () => {
       try {
-        const response = await fetch('https://donate.onefamilee.org/api/total-payments-amount');
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+          console.error('User email not found in localStorage');
+          return;
+        }
+
+        // Fetch user name
+        const nameResponse = await fetch(`https://donate.onefamilee.org/api/name/${userEmail}`);
+        const nameData = await nameResponse.json();
+        setUserName(nameData.name);
+
+        // Fetch total amounts
+        const response = await fetch(`https://donate.onefamilee.org/api/total-payments-amount/${userEmail}`);
         const data = await response.json();
         setTotalAmount(`$${parseFloat(data.currentYearTotal).toLocaleString()}`);
         setLifetimeTotal(`$${parseFloat(data.lifetimeTotal).toLocaleString()}`);
       } catch (error) {
-        console.error('Error fetching total amount:', error);
+        console.error('Error fetching user data:', error);
         setTotalAmount('$0');
         setLifetimeTotal('$0');
+        setUserName('');
       }
     };
 
-    fetchTotalAmount();
+    fetchUserData();
   }, []);
 
   return (
     <>
       {/*------------------------- TOP-IMPACT-PART-START ---------------------*/}
       <div className="acc-head">
-        <h1 className="heading-22">Hi <strong className="bold-text-2">Priyank</strong>, welcome to <strong className="bold-text-2">OneFamilee!</strong></h1>
+        <h1 className="heading-22">Hi <strong className="bold-text-2">{userName}</strong>, welcome to <strong className="bold-text-2">OneFamilee!</strong></h1>
       </div>
 
       <section className="impact-donation">

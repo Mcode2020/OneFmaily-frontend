@@ -411,18 +411,27 @@ section.impact-donation .div-block-11 {
 }
 
 .pagination-controls button {
-    border: 1px solid #d0d5dd;
+    border: 1px solid #007BFF; /* Border color matching the button */
+    padding: 10px 20px;
     border-radius: 8px;
-    justify-content: center;
-    align-items: center;
-    width: 112px;
-    padding: 8px 12px;
-    display: flex;
-    gap: 8px;
-    color: #344054;
-    margin-top: 0;
-    margin-bottom: 0;
-    font-weight: 600;
+    background-color: #007BFF; /* Prominent blue background */
+    color: #FFFFFF; /* White text for high contrast */
+    font-size: 16px;
+    font-weight: 600; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3;
+}
+
+.pagination-controls button:disabled {
+    color: #6C757D; /* Medium grey text for disabled */
+    cursor: default;
+    border-color: #CED4DA; /* Light grey border for disabled */
+    background-color: #E9ECEF; /* Very light grey background for disabled */
 }
 /*############################### RECEIPTS-CSS-END ###############################*/
 
@@ -612,3 +621,36 @@ section.impact-donation .div-block-11 {
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+/*--------------------- GLOBAL-CSS-END ---------------------*/
+
+/* MyAccount.css */
+
+.pagination-button {
+  padding: 10px 20px;
+  border: 1px solid #F0F0F0; /* Even lighter border for subtle look */
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #525D6E; /* Reconfirming the softer dark grey text color */
+  font-weight: 500;
+  outline: none;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.03); /* Making box shadow extremely subtle */
+}
+
+.pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+.pagination-button:hover:not(:disabled) {
+  border-color: #D1D1D1; /* Slightly darker border on hover for subtle feedback */
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.06); /* Slightly more prominent subtle shadow on hover */
+}
+
+/*------------------------- HERO-SECTION-START ---------------------*/
