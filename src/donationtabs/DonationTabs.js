@@ -19,6 +19,8 @@ const DonationTabs = ({ campaignName, slug, goalAmount }) => {
   const [hasDonations, setHasDonations] = useState(false);
   const [currentCampaign, setCurrentCampaign] = useState(slug);
   const [userEmail, setUserEmail] = useState('');
+  const [apiResponseReceived, setApiResponseReceived] = useState(false);
+  const [apiReturnedEmpty, setApiReturnedEmpty] = useState(false);
 
   useEffect(() => {
     // Get email from localStorage
@@ -62,6 +64,9 @@ console.log(slug,"0000000000000000")
   useEffect(() => {
     if (!currentCampaign) return;
 
+    // Reset API response state when campaign changes
+    setApiResponseReceived(false);
+
     const fetchCampaignData = async () => {
       try {
         const response = await fetch(`https://donate.onefamilee.org/api/payments/${currentCampaign}/${goalAmount}`);
@@ -76,30 +81,42 @@ console.log(slug,"0000000000000000")
       try {
         const storedEmail = localStorage.getItem('userEmail');
         let response;
+        let data;
         
         if (storedEmail) {
           // First call webflow-user API
           const webflowResponse = await fetch(`https://donate.onefamilee.org/api/webflow-user/${storedEmail}`);
           if (!webflowResponse.ok) {
             console.error('Error fetching webflow user data');
-            return;
+            // If webflow-user fails, try payments-by-slug API
+            response = await fetch(`https://donate.onefamilee.org/api/payments-by-slug/${slug}`);
+            data = await response.json();
+          } else {
+            // After webflow-user API is successful, call user payments API
+            response = await fetch(`https://donate.onefamilee.org/api/user/${storedEmail}/${slug}`);
+            data = await response.json();
           }
-          
-          // After webflow-user API is successful, call user payments API
-          response = await fetch(`https://donate.onefamilee.org/api/user/${storedEmail}/${slug}`);
         } else {
           // If no email, call the payments-by-slug API
           response = await fetch(`https://donate.onefamilee.org/api/payments-by-slug/${slug}`);
+          data = await response.json();
         }
 
-        const data = await response.json();
         const payments = data.payments || [];
+        
+        // Check if the API returned an empty response (no payments array or empty array)
+        const isEmptyResponse = !data.payments || data.payments.length === 0;
+        setApiReturnedEmpty(isEmptyResponse);
+        
         setUserPayments(payments);
         setHasDonations(payments.length > 0);
+        setApiResponseReceived(true);
       } catch (error) {
         console.error('Error fetching user payments:', error);
         setUserPayments([]);
         setHasDonations(false);
+        setApiReturnedEmpty(true); // Treat errors as empty responses
+        setApiResponseReceived(true);
       }
     };
 
@@ -347,8 +364,13 @@ console.log(slug,"0000000000000000")
               </div>
           </div>
 
-          <h3 className="donation-received-heading">{userPayments.length > 0 ? 'Donation Received' : 'No donations found'}</h3>
-          {userPayments.length > 0 && (
+          <h3 className="donation-received-heading">
+            {apiResponseReceived && !apiReturnedEmpty
+              ? (userPayments.length > 0 ? 'Donation Received' : 'No donations found')
+              : ''
+            }
+          </h3>
+          {apiResponseReceived && !apiReturnedEmpty && userPayments.length > 0 && (
             <div className="donation-receive-list">
               {userPayments.map((payment, index) => {
                 const amount = parseFloat(payment?.amount || '0');

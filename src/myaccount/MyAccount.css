@@ -76,6 +76,7 @@ section.impact-donation .div-block-11 {
     gap: 15px;
     flex-wrap: wrap;
     margin-bottom: 20px;
+    margin-top: 60px;
     display: flex;
 }
 .account-receipt-head .heading-18.m-0 {
@@ -411,27 +412,22 @@ section.impact-donation .div-block-11 {
 }
 
 .pagination-controls button {
-    border: 1px solid #007BFF; /* Border color matching the button */
-    padding: 10px 20px;
+    border: 1px solid #D0D5DD;
+    padding: 8px 15px;
+    width: 125px;
     border-radius: 8px;
-    background-color: #007BFF; /* Prominent blue background */
-    color: #FFFFFF; /* White text for high contrast */
+    background-color: transparent;
+    justify-content: center;
+    color: #344054;
     font-size: 16px;
-    font-weight: 600; 
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.pagination-controls button:hover:not(:disabled) {
-    background-color: #0056b3; /* Darker blue on hover */
-    border-color: #0056b3;
-}
-
 .pagination-controls button:disabled {
-    color: #6C757D; /* Medium grey text for disabled */
+    color: #344054; /* Medium grey text for disabled */
     cursor: default;
-    border-color: #CED4DA; /* Light grey border for disabled */
-    background-color: #E9ECEF; /* Very light grey background for disabled */
 }
 /*############################### RECEIPTS-CSS-END ###############################*/
 

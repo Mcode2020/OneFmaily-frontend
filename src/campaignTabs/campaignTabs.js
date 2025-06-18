@@ -7,6 +7,7 @@ const CampaignTabs = () => {
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
+  const [displayedCampaigns, setDisplayedCampaigns] = useState(3);
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -27,6 +28,11 @@ const CampaignTabs = () => {
     fetchCampaigns();
   }, []);
 
+  // Reset displayed campaigns when tab changes
+  useEffect(() => {
+    setDisplayedCampaigns(3);
+  }, [activeTab]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
@@ -43,6 +49,10 @@ const CampaignTabs = () => {
     }
   };
 
+  const handleLoadMore = () => {
+    setDisplayedCampaigns(prev => prev + 3);
+  };
+
   const renderCampaignCard = (campaign) => (
     <div className="innerpartcontent-2" key={campaign.campaign_slug}>
       <a data-w-id={campaign.campaign_slug} href="#" className="account-campaigns-link w-inline-block">
@@ -53,7 +63,7 @@ const CampaignTabs = () => {
             alt={campaign.campaign_name} 
             className="image-11 account-camp-img" 
           />
-          <h1 className="heading-20">One-time</h1>
+          <h1 className="heading-20">{campaign.type === 'single' ? 'One-time' : 'Monthly'}</h1>
         </div>
         <h3 className="heading-16 camp-head">{campaign.campaign_name}</h3>
         <div className="goalsraisedmoney">
@@ -95,6 +105,9 @@ const CampaignTabs = () => {
   }
 
   const filteredCampaigns = getFilteredCampaigns();
+  const campaignsToShow = filteredCampaigns.slice(0, displayedCampaigns);
+  const hasMoreCampaigns = filteredCampaigns.length > displayedCampaigns;
+  const shouldShowLoadMore = filteredCampaigns.length > 3 && hasMoreCampaigns;
 
   return (
     <>
@@ -106,7 +119,7 @@ const CampaignTabs = () => {
             onClick={() => setActiveTab('all')}
             role="tab"
           >
-            <div className="text-block-8">All</div>
+            <div className="text-block-7">All</div>
           </a> 
           <a 
             className={`tab-link-tab-2 tab-c w-inline-block w-tab-link ${activeTab === 'active' ? 'w--current' : ''}`}
@@ -125,15 +138,24 @@ const CampaignTabs = () => {
         </div>
         <div className="tabs-content w-tab-content">
           <div className="div-block-12">
-            {filteredCampaigns.length > 0 ? (
-              filteredCampaigns.map(renderCampaignCard)
+            {campaignsToShow.length > 0 ? (
+              campaignsToShow.map(renderCampaignCard)
             ) : (
               renderNoDataFound()
             )}
           </div>
-          {activeTab === 'all' && filteredCampaigns.length > 0 && (
+          {shouldShowLoadMore && (
             <div className="div-block-14">
-              <a href="#" className="button-primary-8 loginbtnlink globalyellowbtn ourvolunteerbtn no-back account-camp-load-btn w-button">Load More</a>
+              <a 
+                href="#" 
+                className="button-primary-8 loginbtnlink globalyellowbtn ourvolunteerbtn no-back account-camp-load-btn w-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLoadMore();
+                }}
+              >
+                Load More
+              </a>
             </div>
           )}
         </div>
@@ -161,7 +183,7 @@ const CampaignTabs = () => {
               loading="lazy" 
               className="image-13" 
             />
-            <span>One-time</span>
+            <span>{selectedCampaign?.type === 'single' ? 'One-time' : 'Monthly'}</span>
           </div>
           <div>
             <h1 className="heading-23">{selectedCampaign?.campaign_name}</h1>
@@ -172,7 +194,7 @@ const CampaignTabs = () => {
               <strong>Created on:</strong> {selectedCampaign?.created_at ? formatDate(selectedCampaign.created_at) : ''}
             </div>
             <div className="text-block-9">
-              <strong>Type:</strong> One-time
+              <strong>Type:</strong> {selectedCampaign?.type === 'single' ? 'One-time' : 'Monthly'}
             </div>
           </div>
         </div>

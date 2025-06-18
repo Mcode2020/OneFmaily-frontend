@@ -36,8 +36,8 @@ function App() {
         <div className="header-logo">
           <img src="/images/logo.svg" alt="Logo" />
         </div>
-        <MainPage />
-        {/* <DonationTabs campaignName="unlocking-opportunities-breaking-the-cycle-of-poverty"  slug="unlocking-opportunities-breaking-the-cycle-of-poverty" goalAmount="700000" /> */}
+        {/* <MainPage /> */}
+        <DonationTabs campaignName="unlocking-opportunities-breaking-the-cycle-of-poverty"  slug="unlocking-opportunities-breaking-the-cycle-of-poverty" goalAmount="700000" />
         {/* <MyAccountHeader /> */}
         {/* <MyAccount /> */}
         {/* <CampaignDonation currentcampaignslug="unlocking-opportunities-breaking-the-cycle-of-poverty" currentgoalamount="10000"/> */}

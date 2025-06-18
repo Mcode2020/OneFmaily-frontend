@@ -270,13 +270,14 @@ const MyAccount = () => {
             )}
             
             {/* Pagination Controls */}
-            <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', gap: '10px' }}>
+            <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px', gap: '10px' }}>
                 <button 
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                     className="pagination-button"
                 >
-                    &larr; Previous
+                    <img src="https://donate.onefamilee.org/images/slider-left.svg" />
+                    Previous
                 </button>
                 
                 <button 
@@ -284,7 +285,8 @@ const MyAccount = () => {
                     disabled={currentPage === Math.ceil(payments.length / 10)}
                     className="pagination-button"
                 >
-                    Next &rarr;
+                    Next
+                    <img src="https://donate.onefamilee.org/images/slider-right.svg" />
                 </button>
             </div>
         </div>
@@ -340,20 +342,22 @@ const MyAccount = () => {
                 ))
             )}
             {/* Pagination Controls for Mobile */} 
-            <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', gap: '10px' }}>
+            <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px', gap: '10px' }}>
                 <button 
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                     className="pagination-button"
                 >
-                    &larr; Previous
+                    <img src="/images/slider-left.svg" />
+                    Previous
                 </button>
                 <button 
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(payments.length / 4)))} 
                     disabled={currentPage === Math.ceil(payments.length / 4)}
                     className="pagination-button"
                 >
-                    Next &rarr;
+                    Next
+                    <img src="/images/slider-right.svg" />
                 </button>
             </div>
         </div>
